@@ -4,8 +4,6 @@ ws.onmessage = function (e) {
   $('#msg-block').append(
     e.data
   );
-  var n = $(document).height();
-  $('html, body').animate({ scrollTop: n });
 };
 
 $('#msg-send').click(function(){

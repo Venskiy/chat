@@ -1,8 +1,13 @@
 import os.path
+import json
 
+import brukva
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+
+c = brukva.Client()
+c.connect()
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -23,20 +28,39 @@ class ChatHandler(tornado.web.RequestHandler):
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
-    connections = set()
+    def __init__(self, *args, **kwargs):
+        super(WebSocketHandler, self).__init__(*args, **kwargs)
+        self.client = brukva.Client()
+        self.client.connect()
 
     def open(self):
-        WebSocketHandler.connections.add(self)
-
-    def on_close(self):
-        WebSocketHandler.connections.remove(self)
+        self.channel = '1'
+        self.client.subscribe(self.channel)
+        self.client.listen(self.show_new_message)
 
     def on_message(self, msg):
-        self.send_messages(msg)
+        c.publish(self.channel, msg)
 
-    def send_messages(self, msg):
-        for conn in self.connections:
-            conn.write_message(msg)
+    def show_new_message(self, result):
+        self.write_message(result.body)
+
+    def on_close(self):
+        try:
+            self.client.unsubscribe(self.channel)
+        except AttributeError:
+            pass
+        def check():
+            if self.client.connection.in_progress:
+                tornado.ioloop.IOLoop.instance().add_timeout(
+                    datetime.timedelta(0.00001),
+                    check
+                )
+            else:
+                self.client.disconnect()
+        tornado.ioloop.IOLoop.instance().add_timeout(
+            datetime.timedelta(0.00001),
+            check
+        )
 
 
 def main():

@@ -147,3 +147,7 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 
 SESSION_ENGINE = 'redis_sessions.session'
+
+API_KEY = 'lLvzpGuj5uC_CYGiK99gFHjfgUMb_phA'
+
+SEND_MESSAGE_API_URL = 'http://127.0.0.1:8000/chat/send_message_api'

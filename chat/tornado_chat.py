@@ -5,8 +5,12 @@ import tornado.web
 import tornado.websocket
 import tornado.ioloop
 import tornado.gen
-
 import tornadoredis
+
+from django.conf import settings
+from importlib import import_module
+
+session_engine = import_module(settings.SESSION_ENGINE)
 
 c = tornadoredis.Client()
 c.connect()
@@ -14,25 +18,24 @@ c.connect()
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r'/tornado_chat', ChatHandler),
             (r'/ws', WebSocketHandler),
         ]
         settings = dict(
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
             debug=True,
         )
         tornado.web.Application.__init__(self, handlers, **settings)
-
-class ChatHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render('chat.html')
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
         super(WebSocketHandler, self).__init__(*args, **kwargs)
         self.listen()
+
+    def check_origin(self, origin):
+        if origin == 'http://127.0.0.1:8000':
+            return True
+        else:
+            return False
 
     @tornado.gen.engine
     def listen(self):

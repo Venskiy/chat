@@ -6,10 +6,9 @@ import tornado.ioloop
 
 from django.core.management.base import BaseCommand, CommandError
 
-from chat.tornadoapp.tornado_chat import app
+from chat.tornado_chat import app
 
 class Command(BaseCommand):
-    args = '[port_number]'
     help = 'Starts the Tornado application for message handling.'
 
     def sig_handler(self, sig, frame):

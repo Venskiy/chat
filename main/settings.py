@@ -129,6 +129,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static', 'our_static'),
+    # '/var/www/static/',
+    )
+
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -138,3 +145,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+SESSION_ENGINE = 'redis_sessions.session'

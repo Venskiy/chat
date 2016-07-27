@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:8000/ws");
+var ws = new WebSocket("ws://127.0.0.1:8888/ws");
 
 ws.onmessage = function (e) {
   $('#msg-block').append(

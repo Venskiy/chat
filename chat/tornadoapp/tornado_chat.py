@@ -57,13 +57,4 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.client.unsubscribe('test_channel')
             self.client.disconnect()
 
-
-def main():
-    app = Application()
-    http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(8000)
-    tornado.ioloop.IOLoop.instance().start()
-
-
-if __name__ == '__main__':
-    main()
+app = Application()

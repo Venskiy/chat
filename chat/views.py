@@ -16,13 +16,14 @@ def home(request):
 
     return render(request, 'index.html', {})
 
-@csrf_exempt
+
 def get_all_users(request):
     context = {
         'users': list(User.objects.all().values('username'))
     }
 
     return json_response(context)
+
 
 @csrf_exempt
 def send_message_api(request):

@@ -149,7 +149,11 @@ var __makeRelativeRequire = function(require, mappings, pref) {
     return require(name);
   }
 };
-require.register("container/App.jsx", function(exports, require, module) {
+require.register("actions.js", function(exports, require, module) {
+"use strict";
+});
+
+;require.register("container/App.jsx", function(exports, require, module) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -227,21 +231,56 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _redux = require('redux');
+
+var _reactRedux = require('react-redux');
+
+var _reducer = require('reducer');
+
+var _reducer2 = _interopRequireDefault(_reducer);
+
 var _App = require('container/App');
 
 var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var store = (0, _redux.createStore)(_reducer2.default);
+
 document.addEventListener('DOMContentLoaded', function () {
   var el = document.createElement('div');
   el.id = 'app';
   document.body.appendChild(el);
-  _reactDom2.default.render(_react2.default.createElement(_App2.default, null), el);
+  _reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(_App2.default, null)
+  ), el);
 });
 });
 
-require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+require.register("reducer.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+  var action = arguments[1];
+
+  var textAttrs = void 0;
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
+var initialState = {};
+});
+
+;require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
   
 });})();require('___globals___');
 

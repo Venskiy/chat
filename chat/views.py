@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -6,6 +6,7 @@ from django.conf import settings
 import json
 
 from chat.models import Message
+from chat.utils import json_response
 
 # Create your views here.
 
@@ -14,6 +15,14 @@ def home(request):
         return redirect('/accounts/login')
 
     return render(request, 'index.html', {})
+
+@csrf_exempt
+def get_all_users(request):
+    context = {
+        'users': list(User.objects.all().values('username'))
+    }
+
+    return json_response(context)
 
 @csrf_exempt
 def send_message_api(request):
@@ -28,4 +37,4 @@ def send_message_api(request):
     message_instance.text = message_text
     message_instance.save()
 
-    return HttpResponse(json.dumps({'status': 'ok'}), content_type="application/json")
+    return json_response({'status': 'ok'})

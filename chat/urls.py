@@ -4,5 +4,6 @@ from chat import views
 
 urlpatterns = [
     url(r'^$', views.home, name='chat_homepage'),
+    url(r'^get_all_users$', views.get_all_users, name='get_all_users'),
     url(r'^send_message_api/?$', views.send_message_api, name='send_message_api'),
 ]

@@ -13,10 +13,7 @@ def home(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login')
 
-    context = {
-        'users': User.objects.all()
-    }
-    return render(request, 'chat_homepage.html', context)
+    return render(request, 'index.html', {})
 
 @csrf_exempt
 def send_message_api(request):

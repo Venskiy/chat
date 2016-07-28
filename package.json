@@ -4,7 +4,9 @@
   "description": "chat",
   "main": "index.js",
   "scripts": {
-    "start": "brunch watch --server"
+    "start": "brunch watch --server",
+    "prod": "brunch build --production",
+    "run": ". ./rundjango.sh"
   },
   "repository": {
     "type": "git",

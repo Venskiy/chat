@@ -160,14 +160,59 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _ChatMembers = require('./ChatMembers');
+
+var _ChatMembers2 = _interopRequireDefault(_ChatMembers);
+
+var _ChatWindow = require('./ChatWindow');
+
+var _ChatWindow2 = _interopRequireDefault(_ChatWindow);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
   return _react2.default.createElement(
     'div',
-    null,
-    'Hello, world:)'
+    { className: 'container' },
+    _react2.default.createElement(_ChatMembers2.default, null),
+    _react2.default.createElement(_ChatWindow2.default, null)
   );
+};
+});
+
+;require.register("container/ChatMembers.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement("div", { className: "chat-members" });
+};
+});
+
+;require.register("container/ChatWindow.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement("div", { className: "chat-window" });
 };
 });
 

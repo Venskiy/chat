@@ -11,18 +11,24 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  height: 650px;
+  height: 570px;
   margin-top: 15px;
 }
 
-.chat-members {
-  flex: 0 0 270px;
+.chats-list {
+  flex: 0 0 230px;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
 }
 
 .chat-window {
-  flex: 0 0 600px;
+  flex: 0 0 500px;
+  box-shadow: 0px 0px 5px $grey-color;
+  background-color: $white-color;
+}
+
+.users-list {
+  flex: 0 0 200px;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
 }

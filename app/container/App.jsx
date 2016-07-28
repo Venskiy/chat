@@ -1,11 +1,13 @@
 import React from 'react';
 
-import ChatMembers from './ChatMembers';
+import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
+import UsersList from './UsersList';
 
 export default () => {
   return <div className="container">
-    <ChatMembers />
+    <ChatsList />
     <ChatWindow />
+    <UsersList />
   </div>
 }

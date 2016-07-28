@@ -164,13 +164,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _ChatMembers = require('./ChatMembers');
+var _ChatsList = require('./ChatsList');
 
-var _ChatMembers2 = _interopRequireDefault(_ChatMembers);
+var _ChatsList2 = _interopRequireDefault(_ChatsList);
 
 var _ChatWindow = require('./ChatWindow');
 
 var _ChatWindow2 = _interopRequireDefault(_ChatWindow);
+
+var _UsersList = require('./UsersList');
+
+var _UsersList2 = _interopRequireDefault(_UsersList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -178,27 +182,10 @@ exports.default = function () {
   return _react2.default.createElement(
     'div',
     { className: 'container' },
-    _react2.default.createElement(_ChatMembers2.default, null),
-    _react2.default.createElement(_ChatWindow2.default, null)
+    _react2.default.createElement(_ChatsList2.default, null),
+    _react2.default.createElement(_ChatWindow2.default, null),
+    _react2.default.createElement(_UsersList2.default, null)
   );
-};
-});
-
-;require.register("container/ChatMembers.jsx", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require("react");
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  return _react2.default.createElement("div", { className: "chat-members" });
 };
 });
 
@@ -217,6 +204,42 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = function () {
   return _react2.default.createElement("div", { className: "chat-window" });
+};
+});
+
+;require.register("container/ChatsList.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement("div", { className: "chats-list" });
+};
+});
+
+;require.register("container/UsersList.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement("div", { className: "users-list" });
 };
 });
 

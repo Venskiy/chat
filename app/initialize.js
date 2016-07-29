@@ -11,11 +11,12 @@ import 'whatwg-fetch';
 import reducer from 'reducer';
 import App from 'container/App';
 
-import {initialFetchUsers} from 'actions';
+import {initialFetchUsers, initialFetchChats} from 'actions';
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 store.dispatch(initialFetchUsers());
+store.dispatch(initialFetchChats())
 
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.createElement('div');

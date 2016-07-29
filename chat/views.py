@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -19,7 +19,7 @@ def home(request):
 
 def get_all_users_api(request):
     if not request.user.is_authenticated():
-        return redirect('/accounts/login')
+        return HttpResponse('You are not loged in')
 
     context = {
         'users': list(User.objects.all().exclude(username=request.user).values('username'))
@@ -29,7 +29,7 @@ def get_all_users_api(request):
 
 def create_chat_api(request):
     if not request.user.is_authenticated():
-        return redirect('/accounts/login')
+        return HttpResponse('You are not loged in')
 
     username = request.GET.get('username')
 

@@ -155,22 +155,30 @@ require.register("actions.js", function(exports, require, module) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createChat = exports.initialFetchUsers = undefined;
+exports.initialFetchChats = exports.initialFetchUsers = exports.createChat = undefined;
 
 var _apiCalls = require('utils/apiCalls');
-
-var initialFetchUsers = exports.initialFetchUsers = function initialFetchUsers() {
-  return function (dispatch) {
-    (0, _apiCalls.getAllUsers)().then(function (users) {
-      dispatch({ type: 'ADD_USERS', users: users });
-    });
-  };
-};
 
 var createChat = exports.createChat = function createChat(username) {
   return function (dispatch) {
     (0, _apiCalls.createChat)(username).then(function (chat_id) {
       dispatch({ type: 'ADD_CHAT', chat_id: chat_id });
+    });
+  };
+};
+
+var initialFetchUsers = exports.initialFetchUsers = function initialFetchUsers() {
+  return function (dispatch) {
+    (0, _apiCalls.getAllUsers)().then(function (users) {
+      dispatch({ type: 'RECEIVE_USERS', users: users });
+    });
+  };
+};
+
+var initialFetchChats = exports.initialFetchChats = function initialFetchChats() {
+  return function (dispatch) {
+    (0, _apiCalls.getUserChats)().then(function (chats) {
+      dispatch({ type: 'RECEIVE_CHATS', chats: chats });
     });
   };
 };
@@ -384,6 +392,7 @@ require('whatwg-fetch');
 var store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 
 store.dispatch((0, _actions.initialFetchUsers)());
+store.dispatch((0, _actions.initialFetchChats)());
 
 document.addEventListener('DOMContentLoaded', function () {
   var el = document.createElement('div');
@@ -409,12 +418,14 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'ADD_USERS':
-      return Object.assign({}, state, { users: action.users });
     case 'ADD_CHAT':
       var chats = Array.from(state.chats);
       chats.push(action.chat_id);
       return Object.assign({}, state, { chats: chats });
+    case 'RECEIVE_USERS':
+      return Object.assign({}, state, { users: action.users });
+    case 'RECEIVE_CHATS':
+      return Object.assign({}, state, { chats: action.chats });
     default:
       return state;
   }
@@ -432,6 +443,19 @@ var initialState = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var createChat = exports.createChat = function createChat(username) {
+  return new Promise(function (resolve, reject) {
+    fetch('http://127.0.0.1:8000/chat/create_chat/?username=' + username, {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      response.json().then(function (response) {
+        return resolve(response.chat_id);
+      });
+    });
+  });
+};
+
 var getAllUsers = exports.getAllUsers = function getAllUsers() {
   return new Promise(function (resolve, reject) {
     fetch('http://127.0.0.1:8000/chat/get_all_users', {
@@ -445,14 +469,14 @@ var getAllUsers = exports.getAllUsers = function getAllUsers() {
   });
 };
 
-var createChat = exports.createChat = function createChat(username) {
+var getUserChats = exports.getUserChats = function getUserChats() {
   return new Promise(function (resolve, reject) {
-    fetch('http://127.0.0.1:8000/chat/create_chat/?username=' + username, {
+    fetch('http://127.0.0.1:8000/chat/get_user_chats', {
       method: 'GET',
       credentials: 'same-origin'
     }).then(function (response) {
       response.json().then(function (response) {
-        return resolve(response.chat_id);
+        return resolve(response.chats);
       });
     });
   });

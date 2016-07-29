@@ -17,8 +17,17 @@ body {
 
 .chats-list {
   flex: 0 0 230px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
+}
+
+.chat {
+  height: 50px;
+  text-align: center;
+  border-bottom: 1px solid $grey-color;
 }
 
 .chat-window {

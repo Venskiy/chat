@@ -1,1 +1,546 @@
-!function(){"use strict";var e="undefined"==typeof window?global:window;if("function"!=typeof e.require){var t={},r={},n={},a={}.hasOwnProperty,u=/^\.\.?(\/|$)/,i=function(e,t){for(var r,n=[],a=(u.test(t)?e+"/"+t:t).split("/"),i=0,s=a.length;i<s;i++)r=a[i],".."===r?n.pop():"."!==r&&""!==r&&n.push(r);return n.join("/")},s=function(e){return e.split("/").slice(0,-1).join("/")},c=function(t){return function(r){var n=i(s(t),r);return e.require(n,t)}},o=function(e,t){var n=null;n=m&&m.createHot(e);var a={id:e,exports:{},hot:n};return r[e]=a,t(a.exports,c(e),a),a.exports},l=function(e){return n[e]?l(n[e]):e},f=function(e,t){return l(i(s(e),t))},d=function(e,n){null==n&&(n="/");var u=l(e);if(a.call(r,u))return r[u].exports;if(a.call(t,u))return o(u,t[u]);throw new Error("Cannot find module '"+e+"' from '"+n+"'")};d.alias=function(e,t){n[t]=e};var h=/\.[^.\/]+$/,p=/\/index(\.[^\/]+)?$/,_=function(e){if(h.test(e)){var t=e.replace(h,"");a.call(n,t)&&n[t].replace(h,"")!==t+"/index"||(n[t]=e)}if(p.test(e)){var r=e.replace(p,"");a.call(n,r)||(n[r]=e)}};d.register=d.define=function(e,n){if("object"==typeof e)for(var u in e)a.call(e,u)&&d.register(u,e[u]);else t[e]=n,delete r[e],_(e)},d.list=function(){var e=[];for(var r in t)a.call(t,r)&&e.push(r);return e};var m=e._hmr&&new e._hmr(f,d,t,r);d._cache=r,d.hmr=m&&m.wrap,d.brunch=!0,e.require=d}}(),function(){var e;window;require.register("actions.js",function(e,t,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.initialFetchChats=e.initialFetchUsers=e.createChat=void 0;var n=t("utils/apiCalls");e.createChat=function(e){return function(t){(0,n.createChat)(e).then(function(e){t({type:"ADD_CHAT",chat_id:e})})}},e.initialFetchUsers=function(){return function(e){(0,n.getAllUsers)().then(function(t){e({type:"RECEIVE_USERS",users:t})})}},e.initialFetchChats=function(){return function(e){(0,n.getUserChats)().then(function(t){e({type:"RECEIVE_CHATS",chats:t})})}}}),require.register("components/User.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(e,"__esModule",{value:!0});var a=t("react"),u=n(a);e["default"]=u["default"].createClass({displayName:"User",propTypes:{username:u["default"].PropTypes.string.isRequired,onChatCreate:u["default"].PropTypes.func.isRequired},handleClick:function(e){this.props.onChatCreate(e)},render:function(){var e=this.props.username;return u["default"].createElement("div",{className:"user"},u["default"].createElement("div",null,e),u["default"].createElement("button",{onClick:this.handleClick.bind(this,e)},"Start chat"))}})}),require.register("container/App.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(e,"__esModule",{value:!0});var a=t("react"),u=n(a),i=t("./ChatsList"),s=n(i),c=t("./ChatWindow"),o=n(c),l=t("./UsersList"),f=n(l);e["default"]=function(){return u["default"].createElement("div",{className:"container"},u["default"].createElement(s["default"],null),u["default"].createElement(o["default"],null),u["default"].createElement(f["default"],null))}}),require.register("container/ChatWindow.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(e,"__esModule",{value:!0});var a=t("react"),u=n(a);e["default"]=function(){return u["default"].createElement("div",{className:"chat-window"})}}),require.register("container/ChatsList.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(e,"__esModule",{value:!0});var a=t("react"),u=n(a);e["default"]=function(){return u["default"].createElement("div",{className:"chats-list"})}}),require.register("container/UsersList.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(e,"__esModule",{value:!0});var a=t("react"),u=n(a),i=t("react-redux"),s=t("actions"),c=t("components/User"),o=n(c),l=function(e){var t=e.users,r=e.onChatCreate;return u["default"].createElement("div",{className:"users-list"},t.map(function(e){return u["default"].createElement(o["default"],{username:e.username,onChatCreate:r,key:e.username})}))},f=function(e){return{users:e.users}},d=function(e){return{onChatCreate:function(t){e((0,s.createChat)(t))}}};e["default"]=(0,i.connect)(f,d)(l)}),require.register("initialize.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}var a=t("react-dom"),u=n(a),i=t("react"),s=n(i),c=t("redux"),o=t("redux-thunk"),l=n(o),f=t("react-redux");t("whatwg-fetch");var d=t("reducer"),h=n(d),p=t("container/App"),_=n(p),m=t("actions");t("es6-promise").polyfill(),t("whatwg-fetch");var v=(0,c.createStore)(h["default"],(0,c.applyMiddleware)(l["default"]));v.dispatch((0,m.initialFetchUsers)()),v.dispatch((0,m.initialFetchChats)()),document.addEventListener("DOMContentLoaded",function(){var e=document.createElement("div");e.id="app",document.body.appendChild(e),u["default"].render(s["default"].createElement(f.Provider,{store:v},s["default"].createElement(_["default"],null)),e)})}),require.register("reducer.js",function(e,t,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]=function(){var e=arguments.length<=0||void 0===arguments[0]?n:arguments[0],t=arguments[1];switch(t.type){case"ADD_CHAT":var r=Array.from(e.chats);return r.push(t.chat_id),Object.assign({},e,{chats:r});case"RECEIVE_USERS":return Object.assign({},e,{users:t.users});case"RECEIVE_CHATS":return Object.assign({},e,{chats:t.chats});default:return e}};var n={users:[],chats:[]}}),require.register("utils/apiCalls.js",function(e,t,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});e.createChat=function(e){return new Promise(function(t,r){fetch("http://127.0.0.1:8000/chat/create_chat/?username="+e,{method:"GET",credentials:"same-origin"}).then(function(e){e.json().then(function(e){return t(e.chat_id)})})})},e.getAllUsers=function(){return new Promise(function(e,t){fetch("http://127.0.0.1:8000/chat/get_all_users",{method:"GET",credentials:"same-origin"}).then(function(t){t.json().then(function(t){return e(t.users)})})})},e.getUserChats=function(){return new Promise(function(e,t){fetch("http://127.0.0.1:8000/chat/get_user_chats",{method:"GET",credentials:"same-origin"}).then(function(t){t.json().then(function(t){return e(t.chats)})})})}}),require.alias("process/browser.js","process"),e=require("process"),require.register("___globals___",function(e,t,r){})}(),require("___globals___");
+(function() {
+  'use strict';
+
+  var globals = typeof window === 'undefined' ? global : window;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+  var aliases = {};
+  var has = ({}).hasOwnProperty;
+
+  var expRe = /^\.\.?(\/|$)/;
+  var expand = function(root, name) {
+    var results = [], part;
+    var parts = (expRe.test(name) ? root + '/' + name : name).split('/');
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function expanded(name) {
+      var absolute = expand(dirname(path), name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var hot = null;
+    hot = hmr && hmr.createHot(name);
+    var module = {id: name, exports: {}, hot: hot};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var expandAlias = function(name) {
+    return aliases[name] ? expandAlias(aliases[name]) : name;
+  };
+
+  var _resolve = function(name, dep) {
+    return expandAlias(expand(dirname(name), dep));
+  };
+
+  var require = function(name, loaderPath) {
+    if (loaderPath == null) loaderPath = '/';
+    var path = expandAlias(name);
+
+    if (has.call(cache, path)) return cache[path].exports;
+    if (has.call(modules, path)) return initModule(path, modules[path]);
+
+    throw new Error("Cannot find module '" + name + "' from '" + loaderPath + "'");
+  };
+
+  require.alias = function(from, to) {
+    aliases[to] = from;
+  };
+
+  var extRe = /\.[^.\/]+$/;
+  var indexRe = /\/index(\.[^\/]+)?$/;
+  var addExtensions = function(bundle) {
+    if (extRe.test(bundle)) {
+      var alias = bundle.replace(extRe, '');
+      if (!has.call(aliases, alias) || aliases[alias].replace(extRe, '') === alias + '/index') {
+        aliases[alias] = bundle;
+      }
+    }
+
+    if (indexRe.test(bundle)) {
+      var iAlias = bundle.replace(indexRe, '');
+      if (!has.call(aliases, iAlias)) {
+        aliases[iAlias] = bundle;
+      }
+    }
+  };
+
+  require.register = require.define = function(bundle, fn) {
+    if (typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has.call(bundle, key)) {
+          require.register(key, bundle[key]);
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+      delete cache[bundle];
+      addExtensions(bundle);
+    }
+  };
+
+  require.list = function() {
+    var list = [];
+    for (var item in modules) {
+      if (has.call(modules, item)) {
+        list.push(item);
+      }
+    }
+    return list;
+  };
+
+  var hmr = globals._hmr && new globals._hmr(_resolve, require, modules, cache);
+  require._cache = cache;
+  require.hmr = hmr && hmr.wrap;
+  require.brunch = true;
+  globals.require = require;
+})();
+
+(function() {
+var global = window;
+var process;
+var __makeRelativeRequire = function(require, mappings, pref) {
+  var none = {};
+  var tryReq = function(name, pref) {
+    var val;
+    try {
+      val = require(pref + '/node_modules/' + name);
+      return val;
+    } catch (e) {
+      if (e.toString().indexOf('Cannot find module') === -1) {
+        throw e;
+      }
+
+      if (pref.indexOf('node_modules') !== -1) {
+        var s = pref.split('/');
+        var i = s.lastIndexOf('node_modules');
+        var newPref = s.slice(0, i).join('/');
+        return tryReq(name, newPref);
+      }
+    }
+    return none;
+  };
+  return function(name) {
+    if (name in mappings) name = mappings[name];
+    if (!name) return;
+    if (name[0] !== '.' && pref) {
+      var val = tryReq(name, pref);
+      if (val !== none) return val;
+    }
+    return require(name);
+  }
+};
+require.register("actions.js", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initialFetchChats = exports.initialFetchUsers = exports.createChat = undefined;
+
+var _apiCalls = require('utils/apiCalls');
+
+var createChat = exports.createChat = function createChat(username) {
+  return function (dispatch) {
+    (0, _apiCalls.createChat)(username).then(function (chat_id) {
+      dispatch({ type: 'ADD_CHAT', chat_id: chat_id });
+    });
+  };
+};
+
+var initialFetchUsers = exports.initialFetchUsers = function initialFetchUsers() {
+  return function (dispatch) {
+    (0, _apiCalls.getAllUsers)().then(function (users) {
+      dispatch({ type: 'RECEIVE_USERS', users: users });
+    });
+  };
+};
+
+var initialFetchChats = exports.initialFetchChats = function initialFetchChats() {
+  return function (dispatch) {
+    (0, _apiCalls.getUserChats)().then(function (chats) {
+      dispatch({ type: 'RECEIVE_CHATS', chats: chats });
+    });
+  };
+};
+});
+
+require.register("components/Chat.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _react2.default.createClass({
+  displayName: "Chat",
+
+  propTypes: {
+    chatId: _react2.default.PropTypes.string.isRequired
+  },
+
+  render: function render() {
+    var chatId = this.props.chatId;
+
+
+    return _react2.default.createElement(
+      "div",
+      { className: "chat" },
+      chatId
+    );
+  }
+});
+});
+
+require.register("components/User.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _react2.default.createClass({
+  displayName: "User",
+
+  propTypes: {
+    username: _react2.default.PropTypes.string.isRequired,
+    onChatCreate: _react2.default.PropTypes.func.isRequired
+  },
+
+  handleClick: function handleClick(username) {
+    this.props.onChatCreate(username);
+  },
+  render: function render() {
+    var username = this.props.username;
+
+
+    return _react2.default.createElement(
+      "div",
+      { className: "user" },
+      _react2.default.createElement(
+        "div",
+        null,
+        username
+      ),
+      _react2.default.createElement(
+        "button",
+        { onClick: this.handleClick.bind(this, username) },
+        "Start chat"
+      )
+    );
+  }
+});
+});
+
+require.register("container/App.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ChatsList = require('./ChatsList');
+
+var _ChatsList2 = _interopRequireDefault(_ChatsList);
+
+var _ChatWindow = require('./ChatWindow');
+
+var _ChatWindow2 = _interopRequireDefault(_ChatWindow);
+
+var _UsersList = require('./UsersList');
+
+var _UsersList2 = _interopRequireDefault(_UsersList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement(
+    'div',
+    { className: 'container' },
+    _react2.default.createElement(_ChatsList2.default, null),
+    _react2.default.createElement(_ChatWindow2.default, null),
+    _react2.default.createElement(_UsersList2.default, null)
+  );
+};
+});
+
+;require.register("container/ChatWindow.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  return _react2.default.createElement("div", { className: "chat-window" });
+};
+});
+
+;require.register("container/ChatsList.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _Chat = require('components/Chat');
+
+var _Chat2 = _interopRequireDefault(_Chat);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ChatList = function ChatList(_ref) {
+  var chats = _ref.chats;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'chats-list' },
+    chats.map(function (chat) {
+      return _react2.default.createElement(_Chat2.default, { chatId: chat.id, key: chat.id });
+    })
+  );
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    chats: state.chats
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(ChatList);
+});
+
+require.register("container/UsersList.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _actions = require('actions');
+
+var _User = require('components/User');
+
+var _User2 = _interopRequireDefault(_User);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var UserList = function UserList(_ref) {
+  var users = _ref.users;
+  var onChatCreate = _ref.onChatCreate;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'users-list' },
+    users.map(function (user) {
+      return _react2.default.createElement(_User2.default, { username: user.username, onChatCreate: onChatCreate, key: user.username });
+    })
+  );
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    users: state.users
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    onChatCreate: function onChatCreate(username) {
+      dispatch((0, _actions.createChat)(username));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserList);
+});
+
+require.register("initialize.js", function(exports, require, module) {
+'use strict';
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _redux = require('redux');
+
+var _reduxThunk = require('redux-thunk');
+
+var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+var _reactRedux = require('react-redux');
+
+require('whatwg-fetch');
+
+var _reducer = require('reducer');
+
+var _reducer2 = _interopRequireDefault(_reducer);
+
+var _App = require('container/App');
+
+var _App2 = _interopRequireDefault(_App);
+
+var _actions = require('actions');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+require('es6-promise').polyfill();
+require('whatwg-fetch');
+
+var store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default));
+
+store.dispatch((0, _actions.initialFetchUsers)());
+store.dispatch((0, _actions.initialFetchChats)());
+
+document.addEventListener('DOMContentLoaded', function () {
+  var el = document.createElement('div');
+  el.id = 'app';
+  document.body.appendChild(el);
+  _reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(_App2.default, null)
+  ), el);
+});
+});
+
+require.register("reducer.js", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+  var action = arguments[1];
+
+  switch (action.type) {
+    case 'ADD_CHAT':
+      var chats = Array.from(state.chats);
+      chats.push(action.chat_id);
+      return Object.assign({}, state, { chats: chats });
+    case 'RECEIVE_USERS':
+      return Object.assign({}, state, { users: action.users });
+    case 'RECEIVE_CHATS':
+      return Object.assign({}, state, { chats: action.chats });
+    default:
+      return state;
+  }
+};
+
+var initialState = {
+  users: [{ 'username': 'first' }, { 'username': 'second' }, { 'username': 'third' }],
+  chats: [{ 'id': '1' }, { 'id': '2' }, { 'id': '3' }]
+};
+});
+
+;require.register("utils/apiCalls.js", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var createChat = exports.createChat = function createChat(username) {
+  return new Promise(function (resolve, reject) {
+    fetch('http://127.0.0.1:8000/chat/create_chat/?username=' + username, {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      response.json().then(function (response) {
+        return resolve(response.chat_id);
+      });
+    });
+  });
+};
+
+var getAllUsers = exports.getAllUsers = function getAllUsers() {
+  return new Promise(function (resolve, reject) {
+    fetch('http://127.0.0.1:8000/chat/get_all_users', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      response.json().then(function (response) {
+        return resolve(response.users);
+      });
+    });
+  });
+};
+
+var getUserChats = exports.getUserChats = function getUserChats() {
+  return new Promise(function (resolve, reject) {
+    fetch('http://127.0.0.1:8000/chat/get_user_chats', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      response.json().then(function (response) {
+        return resolve(response.chats);
+      });
+    });
+  });
+};
+});
+
+require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+  
+});})();require('___globals___');
+
+
+//# sourceMappingURL=app.js.map

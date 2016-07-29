@@ -1,6 +1,6 @@
 const initialState = {
-  users: [],
-  chats: []
+  users: [{'username': 'first'}, {'username': 'second'}, {'username': 'third'}],
+  chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}]
 };
 
 export default function(state = initialState, action) {

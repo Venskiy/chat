@@ -9,3 +9,16 @@ export const getAllUsers = () => {
     });
   });
 };
+
+export const createChat = (username) => {
+  console.log(username);
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:8000/chat/create_chat/?${username}`, {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+    .then(response => {
+      response.json().then(response => resolve(response.chat_id));
+    });
+  });
+};

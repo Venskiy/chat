@@ -1,12 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {createChat} from 'actions';
 
 import User from 'components/User'
 
-const UserList = ({users}) => {
+const UserList = ({users, onChatCreate}) => {
   return <div className="users-list">
     {users.map(user => {
-      return <User username={user.username} key={user.username} />;
+      return <User username={user.username} onChatCreate={onChatCreate} key={user.username} />;
     })}
   </div>;
 }
@@ -15,4 +16,10 @@ const mapStateToProps = (state) => ({
   users: state.users
 });
 
-export default connect(mapStateToProps)(UserList);
+const mapDispatchToProps = (dispatch) => ({
+  onChatCreate(username) {
+    dispatch(createChat(username));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);

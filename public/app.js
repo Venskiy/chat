@@ -155,7 +155,7 @@ require.register("actions.js", function(exports, require, module) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.initialFetchUsers = undefined;
+exports.createChat = exports.initialFetchUsers = undefined;
 
 var _apiCalls = require('utils/apiCalls');
 
@@ -163,6 +163,14 @@ var initialFetchUsers = exports.initialFetchUsers = function initialFetchUsers()
   return function (dispatch) {
     (0, _apiCalls.getAllUsers)().then(function (users) {
       dispatch({ type: 'ADD_USERS', users: users });
+    });
+  };
+};
+
+var createChat = exports.createChat = function createChat(username) {
+  return function (dispatch) {
+    (0, _apiCalls.createChat)(username).then(function (chat_id) {
+      dispatch({ type: 'ADD_CHAT', chat_id: chat_id });
     });
   };
 };
@@ -185,21 +193,28 @@ exports.default = _react2.default.createClass({
   displayName: "User",
 
   propTypes: {
-    username: _react2.default.PropTypes.string.isRequired
+    username: _react2.default.PropTypes.string.isRequired,
+    onChatCreate: _react2.default.PropTypes.func.isRequired
   },
 
+  handleClick: function handleClick(username) {
+    this.props.onChatCreate(username);
+  },
   render: function render() {
+    var username = this.props.username;
+
+
     return _react2.default.createElement(
       "div",
       { className: "user" },
       _react2.default.createElement(
         "div",
         null,
-        this.props.username
+        username
       ),
       _react2.default.createElement(
         "button",
-        null,
+        { onClick: this.handleClick.bind(this, username) },
         "Start chat"
       )
     );
@@ -292,6 +307,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = require('react-redux');
 
+var _actions = require('actions');
+
 var _User = require('components/User');
 
 var _User2 = _interopRequireDefault(_User);
@@ -300,12 +317,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var UserList = function UserList(_ref) {
   var users = _ref.users;
+  var onChatCreate = _ref.onChatCreate;
 
   return _react2.default.createElement(
     'div',
     { className: 'users-list' },
     users.map(function (user) {
-      return _react2.default.createElement(_User2.default, { username: user.username, key: user.username });
+      return _react2.default.createElement(_User2.default, { username: user.username, onChatCreate: onChatCreate, key: user.username });
     })
   );
 };
@@ -316,7 +334,15 @@ var mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(UserList);
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    onChatCreate: function onChatCreate(username) {
+      dispatch((0, _actions.createChat)(username));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserList);
 });
 
 require.register("initialize.js", function(exports, require, module) {
@@ -385,13 +411,18 @@ exports.default = function () {
   switch (action.type) {
     case 'ADD_USERS':
       return Object.assign({}, state, { users: action.users });
+    case 'ADD_CHAT':
+      chats = Array.from(state.chats);
+      chats.push(action.chat_id);
+      return Object.assign({}, state, { chats: chats });
     default:
       return state;
   }
 };
 
 var initialState = {
-  users: []
+  users: [],
+  chats: []
 };
 });
 
@@ -409,6 +440,20 @@ var getAllUsers = exports.getAllUsers = function getAllUsers() {
     }).then(function (response) {
       response.json().then(function (response) {
         return resolve(response.users);
+      });
+    });
+  });
+};
+
+var createChat = exports.createChat = function createChat(username) {
+  console.log(username);
+  return new Promise(function (resolve, reject) {
+    fetch('http://127.0.0.1:8000/chat/create_chat/?' + username, {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      response.json().then(function (response) {
+        return resolve(response.chat_id);
       });
     });
   });

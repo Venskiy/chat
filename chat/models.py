@@ -19,7 +19,7 @@ class Message(models.Model):
 class Chat(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     participants = models.ManyToManyField(User)
-    messages = models.ManyToManyField(Message)
+    messages = models.ManyToManyField(Message, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):

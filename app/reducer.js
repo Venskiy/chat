@@ -8,7 +8,7 @@ export default function(state = initialState, action) {
     case 'ADD_USERS':
       return Object.assign({}, state, { users: action.users });
     case 'ADD_CHAT':
-      chats = Array.from(state.chats);
+      let chats = Array.from(state.chats);
       chats.push(action.chat_id);
       return Object.assign({}, state, {chats: chats});
     default:

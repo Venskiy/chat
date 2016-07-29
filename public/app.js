@@ -412,7 +412,7 @@ exports.default = function () {
     case 'ADD_USERS':
       return Object.assign({}, state, { users: action.users });
     case 'ADD_CHAT':
-      chats = Array.from(state.chats);
+      var chats = Array.from(state.chats);
       chats.push(action.chat_id);
       return Object.assign({}, state, { chats: chats });
     default:
@@ -446,9 +446,8 @@ var getAllUsers = exports.getAllUsers = function getAllUsers() {
 };
 
 var createChat = exports.createChat = function createChat(username) {
-  console.log(username);
   return new Promise(function (resolve, reject) {
-    fetch('http://127.0.0.1:8000/chat/create_chat/?' + username, {
+    fetch('http://127.0.0.1:8000/chat/create_chat/?username=' + username, {
       method: 'GET',
       credentials: 'same-origin'
     }).then(function (response) {

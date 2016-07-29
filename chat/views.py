@@ -5,7 +5,7 @@ from django.conf import settings
 
 import json
 
-from chat.models import Message
+from chat.models import Message, Chat
 from chat.utils import json_response
 
 # Create your views here.
@@ -17,12 +17,28 @@ def home(request):
     return render(request, 'index.html', {})
 
 
-def get_all_users(request):
+def get_all_users_api(request):
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
+
     context = {
         'users': list(User.objects.all().exclude(username=request.user).values('username'))
     }
 
     return json_response(context)
+
+def create_chat_api(request):
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
+
+    username = request.GET.get('username')
+
+    recipient = User.objects.get(username=username)
+
+    chat = Chat.objects.create()
+    chat.participants.add(request.user, recipient)
+
+    return json_response({'chat_id': chat.id})
 
 
 @csrf_exempt

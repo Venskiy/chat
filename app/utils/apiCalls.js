@@ -11,9 +11,8 @@ export const getAllUsers = () => {
 };
 
 export const createChat = (username) => {
-  console.log(username);
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:8000/chat/create_chat/?${username}`, {
+    fetch(`http://127.0.0.1:8000/chat/create_chat/?username=${username}`, {
       method: 'GET',
       credentials: 'same-origin'
     })

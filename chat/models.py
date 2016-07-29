@@ -8,7 +8,7 @@ class Message(models.Model):
     sender = models.ForeignKey(User)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
     class Meta:
@@ -19,11 +19,11 @@ class Message(models.Model):
 class Chat(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     participants = models.ManyToManyField(User)
-    messages = models.ManyToManyField(Message, blank=True)
+    messages = models.ManyToManyField(Message)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
-        return self.id
+    def __str__(self):
+        return str(self.id)
 
     class Meta:
         verbose_name = 'Chat'

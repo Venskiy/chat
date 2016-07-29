@@ -59,6 +59,22 @@ def create_chat_api(request):
     return json_response({'chat_id': chat.id})
 
 
+def load_chat_messages_api(request):
+    if not request.user.is_authenticated():
+        return HttpResponse('You are not loged in')
+
+    chat_id = request.GET.get('chat_id')
+
+    chat = Chat.objects.get(id=chat_id)
+    chat_messages = list(chat.messages.all().values('text'))
+
+    context = {
+        'chat_messages': chat_messages
+    }
+
+    return json_response(context)
+
+
 @csrf_exempt
 def send_message_api(request):
     api_key = request.POST.get("api_key")

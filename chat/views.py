@@ -19,7 +19,7 @@ def home(request):
 
 def get_all_users(request):
     context = {
-        'users': list(User.objects.all().values('username'))
+        'users': list(User.objects.all().exclude(username=request.user).values('username'))
     }
 
     return json_response(context)

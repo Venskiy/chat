@@ -29,6 +29,25 @@ body {
 
 .users-list {
   flex: 0 0 200px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
+}
+
+.user {
+  height: 57px;
+  text-align: center;
+  border-bottom: 1px solid $grey-color;
+
+  div {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  button {
+    margin-top: 5px;
+  }
 }

@@ -21,11 +21,29 @@ def get_all_users_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
 
+    all_users = User.objects.all()
+    users = list(all_users.exclude(username=request.user).values('username'))
+
     context = {
-        'users': list(User.objects.all().exclude(username=request.user).values('username'))
+        'users': users
     }
 
     return json_response(context)
+
+
+def get_user_chats_api(request):
+    if not request.user.is_authenticated():
+        return HttpResponse('You are not loged in')
+
+    user_chats = Chat.objects.filter(participants=request.user)
+    chats_id = list(user_chats.values('id'))
+
+    context = {
+        'chats': chats_id
+    }
+
+    return json_response(context)
+
 
 def create_chat_api(request):
     if not request.user.is_authenticated():

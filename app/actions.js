@@ -1,5 +1,10 @@
 import {createChat as _createChat, getAllUsers, getUserChats} from 'utils/apiCalls';
 
+export const selectChat = (chatId) => ({
+  type: 'SELECT_CHAT',
+  chatId
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chat_id => {

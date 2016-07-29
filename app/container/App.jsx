@@ -5,7 +5,7 @@ import ChatWindow from './ChatWindow';
 import UsersList from './UsersList';
 
 export default () => {
-  return <div className="container">
+  return <div className="Container">
     <ChatsList />
     <ChatWindow />
     <UsersList />

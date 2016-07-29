@@ -5,7 +5,7 @@ import {createChat} from 'actions';
 import User from 'components/User'
 
 const UserList = ({users, onChatCreate}) => {
-  return <div className="users-list">
+  return <div className="UsersList">
     {users.map(user => {
       return <User username={user.username} onChatCreate={onChatCreate} key={user.username} />;
     })}

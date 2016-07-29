@@ -6,16 +6,16 @@ export default React.createClass({
     onChatCreate: React.PropTypes.func.isRequired
   },
 
-  handleClick(username) {
-    this.props.onChatCreate(username);
+  handleClick() {
+    this.props.onChatCreate(this.props.username);
   },
 
   render () {
     const {username} = this.props;
 
-    return <div className="user">
+    return <div className="User">
       <div>{username}</div>
-      <button onClick={this.handleClick.bind(this, username)}>Start chat</button>
+      <button onClick={this.handleClick}>Start chat</button>
     </div>
   }
 });

@@ -1,18 +1,26 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {selectChat} from 'actions';
 
 import Chat from 'components/Chat';
 
-const ChatList = ({chats}) => {
-  return <div className="chats-list">
+const ChatList = ({chats, selectedChat, onChatSelect}) => {
+  return <div className="ChatList">
     {chats.map(chat => {
-      return <Chat chatId={chat.id} key={chat.id} />
+      return <Chat chatId={chat.id} selectedChat={selectedChat} onSelect={onChatSelect} key={chat.id} />
     })}
   </div>;
 }
 
 const mapStateToProps = (state) => ({
-  chats: state.chats
+  chats: state.chats,
+  selectedChat: state.selectedChat
 });
 
-export default connect(mapStateToProps)(ChatList);
+const mapDispatchToProps = (dispatch) => ({
+  onChatSelect(chatId) {
+    dispatch(selectChat(chatId));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

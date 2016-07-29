@@ -1,10 +1,13 @@
 const initialState = {
   users: [{'username': 'first'}, {'username': 'second'}, {'username': 'third'}],
-  chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}]
+  chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}],
+  selectedChat: ''
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case 'SELECT_CHAT':
+      return Object.assign({}, state, {selectedChat: action.chatId});
     case 'ADD_CHAT':
       let chats = Array.from(state.chats);
       chats.push(action.chat_id);

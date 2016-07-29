@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default () => {
-  return <div className="chat-window"></div>
+  return <div className="ChatWindow"></div>
 }

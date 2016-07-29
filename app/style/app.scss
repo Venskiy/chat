@@ -8,14 +8,14 @@ body {
   background-color: $light-grey-color;
 }
 
-.container {
+.Container {
   display: flex;
   justify-content: center;
   height: 570px;
   margin-top: 15px;
 }
 
-.chats-list {
+.ChatList {
   flex: 0 0 230px;
   display: block;
   overflow-x: hidden;
@@ -24,19 +24,30 @@ body {
   background-color: $white-color;
 }
 
-.chat {
+.Chat {
   height: 50px;
   text-align: center;
   border-bottom: 1px solid $grey-color;
+
+  &-selected {
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid $grey-color;
+    background-color: $grey-color;
+  }
 }
 
-.chat-window {
+.Chat:hover {
+  background-color: $light-grey-color;
+}
+
+.ChatWindow {
   flex: 0 0 500px;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
 }
 
-.users-list {
+.UsersList {
   flex: 0 0 200px;
   display: block;
   overflow-x: hidden;
@@ -45,7 +56,7 @@ body {
   background-color: $white-color;
 }
 
-.user {
+.User {
   height: 57px;
   text-align: center;
   border-bottom: 1px solid $grey-color;

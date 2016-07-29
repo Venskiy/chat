@@ -13,8 +13,7 @@ const ChatList = ({chats, selectedChat, onChatSelect}) => {
 }
 
 const mapStateToProps = (state) => ({
-  chats: state.chats,
-  selectedChat: state.selectedChat
+  chats: state.chats
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -16,6 +16,6 @@ export default React.createClass({
     return <div className="User">
       <div>{username}</div>
       <button onClick={this.handleClick}>Start chat</button>
-    </div>
+    </div>;
   }
 });

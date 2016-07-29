@@ -8,7 +8,6 @@ export default React.createClass({
   },
 
   handleClick() {
-
     this.props.onSelect(this.props.chatId);
   },
 
@@ -18,6 +17,6 @@ export default React.createClass({
 
     return <div className={className} onClick={this.handleClick}>
       {chatId}
-    </div>
+    </div>;
   }
 });

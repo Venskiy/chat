@@ -1,4 +1,5 @@
-import {createChat as _createChat, getAllUsers, getUserChats} from 'utils/apiCalls';
+import {createChat as _createChat, loadChatMessages as _loadChatMessages,
+  getAllUsers, getUserChats} from 'utils/apiCalls';
 
 export const selectChat = (chatId) => ({
   type: 'SELECT_CHAT',
@@ -9,6 +10,14 @@ export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chat_id => {
       dispatch({ type: 'ADD_CHAT', chat_id });
+    });
+  };
+};
+
+export const loadChatMessages = (chatId) => {
+  return dispatch => {
+    _loadChatMessages(chatId).then(chatMessages => {
+      dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatMessages });
     });
   };
 };

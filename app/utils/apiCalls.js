@@ -35,3 +35,16 @@ export const getUserChats = () => {
     });
   });
 };
+
+
+export const loadChatMessages = (chatId) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:8000/chat/load_chat_messages/?chat_id=${chatId}`, {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+    .then(response => {
+      response.json().then(response => resolve(response.chat_messages));
+    });
+  });
+}

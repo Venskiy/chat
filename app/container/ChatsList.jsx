@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {selectChat} from 'actions';
+import {selectChat, loadChatMessages} from 'actions';
 
 import Chat from 'components/Chat';
 
@@ -20,6 +20,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onChatSelect(chatId) {
     dispatch(selectChat(chatId));
+    dispatch(loadChatMessages(chatId));
   }
 });
 

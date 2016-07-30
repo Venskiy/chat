@@ -9,7 +9,13 @@ export default function(state = initialState, action) {
   let messages;
   switch (action.type) {
     case 'SELECT_CHAT':
-      return Object.assign({}, state, {selectedChat: action.chatId});
+      return Object.assign({}, state, {selectedChat: action.chatId.toString()});
+    case 'ADD_CHAT_MESSAGE':
+      const chatMessages = Array.from(state.messages[action.chatId]);
+      chatMessages.push({'text': action.message});
+      messages = Object.assign({}, state.messages);
+      messages[action.chatId] = chatMessages;
+      return Object.assign({}, state, { messages: messages });
     case 'ADD_CHAT':
       let chats = Array.from(state.chats);
       chats.push(action.chat_id);
@@ -17,7 +23,7 @@ export default function(state = initialState, action) {
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
       messages[state.selectedChat] = action.chatMessages;
-      return Object.assign({}, state, { messages })
+      return Object.assign({}, state, { messages });
     case 'RECEIVE_USERS':
       return Object.assign({}, state, { users: action.users });
     case 'RECEIVE_CHATS':

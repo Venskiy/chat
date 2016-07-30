@@ -77,12 +77,11 @@ def load_chat_messages_api(request):
 
 @csrf_exempt
 def send_message_api(request):
-    api_key = request.POST.get("api_key")
+    api_key = request.POST.get('api_key')
 
     if api_key != settings.API_KEY:
-        return json_response({"error": "Please pass a correct API key."})
+        return json_response({'error': 'Please pass a correct API key.'})
 
-    # test user
     sender_id = request.POST.get('sender_id')
     sender = User.objects.get(id=sender_id)
     message_text = request.POST.get('message')
@@ -91,5 +90,9 @@ def send_message_api(request):
     message_instance.sender = sender
     message_instance.text = message_text
     message_instance.save()
+
+    chat_id = request.POST.get('chat_id')
+    chat = Chat.objects.get(id=chat_id)
+    chat.messages.add(message_instance)
 
     return json_response({'status': 'ok'})

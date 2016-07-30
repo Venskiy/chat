@@ -6,10 +6,16 @@ export const selectChat = (chatId) => ({
   chatId
 });
 
+export const addChatMessage = (chatId, message) => ({
+  type: 'ADD_CHAT_MESSAGE',
+  chatId,
+  message
+});
+
 export const createChat = (username) => {
   return dispatch => {
-    _createChat(username).then(chat_id => {
-      dispatch({ type: 'ADD_CHAT', chat_id });
+    _createChat(username).then(chatId => {
+      dispatch({ type: 'ADD_CHAT', chatId });
     });
   };
 };

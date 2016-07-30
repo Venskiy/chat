@@ -65,6 +65,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             body=urlencode({
                 'sender_id': self.user_id,
                 'message': msg.encode('utf-8'),
+                'chat_id': self.chat_id,
                 'api_key': settings.API_KEY,
             })
         )

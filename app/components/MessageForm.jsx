@@ -4,14 +4,17 @@ let ws;
 
 export default React.createClass({
   propTypes: {
-    chatId: React.PropTypes.string.isRequired
+    chatId: React.PropTypes.string.isRequired,
+    onMessage: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
-    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${this.props.chatId}/`);
+    const {chatId, onMessage} = this.props;
+
+    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
 
     ws.onmessage = function(e) {
-      alert(e.data);
+      onMessage(chatId, e.data);
     };
   },
 

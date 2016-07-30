@@ -14,7 +14,6 @@ export default React.createClass({
     ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
 
     ws.onmessage = function(e) {
-      console.log('mount onmessage');
       onMessage(chatId, e.data);
     };
   },
@@ -45,8 +44,8 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
-      <input className="MessageText" ref="message" type="text" placeholder="Type your text here" />
-      <button onClick={this.handleClick} />
+      <textarea ref="message" type="text" placeholder="Type your text here" />
+      <button onClick={this.handleClick}>Send</button>
     </div>
   }
 });

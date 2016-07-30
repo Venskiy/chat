@@ -280,7 +280,6 @@ exports.default = _react2.default.createClass({
     ws = new WebSocket('ws://127.0.0.1:8888/tornado_chat/' + chatId + '/');
 
     ws.onmessage = function (e) {
-      console.log('mount onmessage');
       onMessage(chatId, e.data);
     };
   },
@@ -308,8 +307,12 @@ exports.default = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'MessageForm' },
-      _react2.default.createElement('input', { className: 'MessageText', ref: 'message', type: 'text', placeholder: 'Type your text here' }),
-      _react2.default.createElement('button', { onClick: this.handleClick })
+      _react2.default.createElement('textarea', { ref: 'message', type: 'text', placeholder: 'Type your text here' }),
+      _react2.default.createElement(
+        'button',
+        { onClick: this.handleClick },
+        'Send'
+      )
     );
   }
 });
@@ -714,7 +717,7 @@ var initialState = {
   users: [{ 'username': 'first' }, { 'username': 'second' }, { 'username': 'third' }],
   chats: [{ 'id': '1' }, { 'id': '2' }, { 'id': '3' }],
   selectedChat: '',
-  messages: {}
+  messages: { '2': [{ 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }, { 'text': 'hello' }] }
 };
 });
 

@@ -2,7 +2,9 @@ const initialState = {
   users: [{'username': 'first'}, {'username': 'second'}, {'username': 'third'}],
   chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}],
   selectedChat: '',
-  messages: {}
+  messages: {'2': [{'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
+   {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
+    {'text': 'hello'}, {'text': 'hello'}, ]}
 };
 
 export default function(state = initialState, action) {

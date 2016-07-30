@@ -43,8 +43,50 @@ body {
 
 .ChatWindow {
   flex: 0 0 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
+
+  &-empty {
+    flex: 0 0 500px;
+    box-shadow: 0px 0px 5px $grey-color;
+    background-color: $white-color;
+  }
+}
+
+.MessageForm {
+  flex: 0 0 100px;
+
+  textarea {
+    width: 400px;
+    height: 80px;
+    float: left;
+    margin: 8px;
+    resize: none;
+    overflow: hidden;
+  }
+
+  button {
+    width: 70px;
+    height: 86px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+}
+
+.MessagesBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.Message {
+  margin: 9px;
 }
 
 .UsersList {

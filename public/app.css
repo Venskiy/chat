@@ -1,1 +1,108 @@
-body{height:100%;font-family:"Myriad Set Pro","Helvetica Neue",Helvetica,Arial,sans-serif;background-color:#eee}.Container{display:flex;justify-content:center;height:570px;margin-top:15px}.ChatList,.UsersList{display:block;overflow-x:hidden;overflow-y:scroll}.Chat,.Chat-selected{height:50px;border-bottom:1px solid #ccc;text-align:center}.User button,.User div{margin-top:5px}.ChatList{flex:0 0 230px;box-shadow:0 0 5px #ccc;background-color:#fff}.Chat-selected{background-color:#ccc}.Chat:hover{background-color:#eee}.ChatWindow,.UsersList{box-shadow:0 0 5px #ccc;background-color:#fff}.ChatWindow{flex:0 0 500px}.UsersList{flex:0 0 200px}.User{height:57px;text-align:center;border-bottom:1px solid #ccc}.User div{margin-bottom:5px;text-align:center}
+/* line 5, /home/ilya/env/chat/chat/app/style/app.scss */
+body {
+  height: 100%;
+  font-family: "Myriad Set Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #eee; }
+
+/* line 11, /home/ilya/env/chat/chat/app/style/app.scss */
+.Container {
+  display: flex;
+  justify-content: center;
+  height: 570px;
+  margin-top: 15px; }
+
+/* line 18, /home/ilya/env/chat/chat/app/style/app.scss */
+.ChatList {
+  flex: 0 0 230px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #fff; }
+
+/* line 27, /home/ilya/env/chat/chat/app/style/app.scss */
+.Chat {
+  height: 50px;
+  text-align: center;
+  border-bottom: 1px solid #ccc; }
+  /* line 32, /home/ilya/env/chat/chat/app/style/app.scss */
+  .Chat-selected {
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    background-color: #ccc; }
+
+/* line 40, /home/ilya/env/chat/chat/app/style/app.scss */
+.Chat:hover {
+  background-color: #eee; }
+
+/* line 44, /home/ilya/env/chat/chat/app/style/app.scss */
+.ChatWindow {
+  flex: 0 0 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #fff; }
+  /* line 52, /home/ilya/env/chat/chat/app/style/app.scss */
+  .ChatWindow-empty {
+    flex: 0 0 500px;
+    box-shadow: 0px 0px 5px #ccc;
+    background-color: #fff; }
+
+/* line 59, /home/ilya/env/chat/chat/app/style/app.scss */
+.MessageForm {
+  flex: 0 0 100px; }
+  /* line 62, /home/ilya/env/chat/chat/app/style/app.scss */
+  .MessageForm textarea {
+    width: 400px;
+    height: 80px;
+    float: left;
+    margin: 8px;
+    resize: none;
+    overflow: hidden; }
+  /* line 71, /home/ilya/env/chat/chat/app/style/app.scss */
+  .MessageForm button {
+    width: 70px;
+    height: 86px;
+    margin-top: 8px;
+    margin-bottom: 8px; }
+
+/* line 79, /home/ilya/env/chat/chat/app/style/app.scss */
+.MessagesBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll; }
+
+/* line 88, /home/ilya/env/chat/chat/app/style/app.scss */
+.Message {
+  margin: 9px; }
+
+/* line 92, /home/ilya/env/chat/chat/app/style/app.scss */
+.UsersList {
+  flex: 0 0 200px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #fff; }
+
+/* line 101, /home/ilya/env/chat/chat/app/style/app.scss */
+.User {
+  height: 57px;
+  text-align: center;
+  border-bottom: 1px solid #ccc; }
+  /* line 106, /home/ilya/env/chat/chat/app/style/app.scss */
+  .User div {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center; }
+  /* line 112, /home/ilya/env/chat/chat/app/style/app.scss */
+  .User button {
+    margin-top: 5px; }
+
+
+/*# sourceMappingURL=app.css.map*/

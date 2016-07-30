@@ -37,6 +37,12 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
     @tornado.gen.engine
     def open(self, chat_id):
         self.chat_id = chat_id
+
+        session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
+        session = session_engine.SessionStore(session_key)
+
+        self.user_id = session['_auth_user_id']
+
         yield tornado.gen.Task(self.client.subscribe, 'chat_{}'.format(chat_id))
         self.client.listen(self.show_new_message)
 
@@ -54,11 +60,12 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
 
         http_client = tornado.httpclient.AsyncHTTPClient()
         request = tornado.httpclient.HTTPRequest(
-            "".join([settings.SEND_MESSAGE_API_URL, "/",]),
-            method="POST",
+            ''.join([settings.SEND_MESSAGE_API_URL, "/",]),
+            method='POST',
             body=urlencode({
-                "message": msg.encode("utf-8"),
-                "api_key": settings.API_KEY,
+                'sender_id': self.user_id,
+                'message': msg.encode('utf-8'),
+                'api_key': settings.API_KEY,
             })
         )
         http_client.fetch(request, self.handle_request)

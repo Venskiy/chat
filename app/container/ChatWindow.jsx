@@ -1,11 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import Messages from 'components/Messages';
+import MessagesBlock from 'components/MessagesBlock';
+import MessageForm from 'components/MessageForm';
 
 const ChatWindow = ({selectedChat, messages}) => {
   return <div className="ChatWindow">
-    <Messages chatMessages={messages[selectedChat]} />
+    <MessagesBlock chatMessages={messages[selectedChat]} />
+    <MessageForm />
   </div>
 }
 

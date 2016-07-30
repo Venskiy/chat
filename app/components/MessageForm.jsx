@@ -14,7 +14,26 @@ export default React.createClass({
     ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
 
     ws.onmessage = function(e) {
+      console.log('mount onmessage');
       onMessage(chatId, e.data);
+    };
+  },
+
+  shouldComponentUpdate(nextProps) {
+    if(nextProps.chatId === this.props.chatId) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  },
+
+  componentWillUpdate(nextProps) {
+    ws.close();
+    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chatId}/`);
+
+    ws.onmessage = function(e) {
+      nextProps.onMessage(nextProps.chatId, e.data);
     };
   },
 

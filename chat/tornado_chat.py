@@ -20,7 +20,7 @@ c.connect()
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r'/ws', WebSocketHandler),
+            (r'/tornado_chat/(?P<chat_id>\d+)/', TornadoChatHandler),
         ]
         settings = dict(
             debug=True,
@@ -28,10 +28,17 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
+class TornadoChatHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
-        super(WebSocketHandler, self).__init__(*args, **kwargs)
-        self.listen()
+        super(TornadoChatHandler, self).__init__(*args, **kwargs)
+        self.client = tornadoredis.Client()
+        self.client.connect()
+
+    @tornado.gen.engine
+    def open(self, chat_id):
+        self.chat_id = chat_id
+        yield tornado.gen.Task(self.client.subscribe, 'chat_{}'.format(chat_id))
+        self.client.listen(self.show_new_message)
 
     def check_origin(self, origin):
         if origin == 'http://127.0.0.1:8000':
@@ -39,18 +46,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         else:
             return False
 
-    @tornado.gen.engine
-    def listen(self):
-        self.client = tornadoredis.Client()
-        self.client.connect()
-        yield tornado.gen.Task(self.client.subscribe, 'test_channel')
-        self.client.listen(self.show_new_message)
-
     def handle_request(self, response):
         pass
 
     def on_message(self, msg):
-        c.publish('test_channel', msg)
+        c.publish('chat_{}'.format(self.chat_id), msg)
 
         http_client = tornado.httpclient.AsyncHTTPClient()
         request = tornado.httpclient.HTTPRequest(
@@ -73,7 +73,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         if self.client.subscribed:
-            self.client.unsubscribe('test_channel')
+            self.client.unsubscribe('chat_{}'.format(self.chat_id))
             self.client.disconnect()
 
 app = Application()

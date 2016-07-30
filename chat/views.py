@@ -82,10 +82,16 @@ def send_message_api(request):
     if api_key != settings.API_KEY:
         return json_response({"error": "Please pass a correct API key."})
 
+    # test user
+    user = User.objects.get(username='ilya')
+
+    print(request.user)
+
     message_text = request.POST.get("message")
 
     message_instance = Message()
     message_instance.text = message_text
+    message_instance.sender = user
     message_instance.save()
 
     return json_response({'status': 'ok'})

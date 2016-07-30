@@ -5,10 +5,15 @@ import MessagesBlock from 'components/MessagesBlock';
 import MessageForm from 'components/MessageForm';
 
 const ChatWindow = ({selectedChat, messages}) => {
-  return <div className="ChatWindow">
-    <MessagesBlock chatMessages={messages[selectedChat]} />
-    <MessageForm />
-  </div>
+  if(selectedChat) {
+    return <div className="ChatWindow">
+      <MessagesBlock chatMessages={messages[selectedChat]} />
+      <MessageForm chatId={selectedChat}/>
+    </div>
+  }
+  else {
+    return <div className="ChatWindow-empty" />
+  }
 }
 
 const mapStateToProps = (state) => ({

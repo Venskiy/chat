@@ -3,8 +3,7 @@ const initialState = {
   chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}],
   selectedChat: '',
   messages: {'2': [{'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
-   {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
-    {'text': 'hello'}, {'text': 'hello'}, ]}
+   {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'} ]}
 };
 
 export default function(state = initialState, action) {
@@ -14,7 +13,7 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, {selectedChat: action.chatId.toString()});
     case 'ADD_CHAT_MESSAGE':
       const chatMessages = Array.from(state.messages[action.chatId]);
-      chatMessages.push({'text': action.message});
+      chatMessages.unshift({'text': action.message});
       messages = Object.assign({}, state.messages);
       messages[action.chatId] = chatMessages;
       return Object.assign({}, state, { messages: messages });

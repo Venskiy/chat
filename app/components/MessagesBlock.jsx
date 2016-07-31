@@ -10,8 +10,8 @@ export default React.createClass({
 
     if(chatMessages) {
       return <div className="MessagesBlock">
-        {chatMessages.map(message => {
-          return <div className="Message">{message.text}</div>
+        {chatMessages.map((message, i) => {
+          return <div className="Message" key={i}>{message.text}</div>
         })}
       </div>;
     }

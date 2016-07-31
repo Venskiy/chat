@@ -36,6 +36,8 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
 
     @tornado.gen.engine
     def open(self, chat_id):
+        # TODO some checks
+
         self.chat_id = chat_id
 
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)

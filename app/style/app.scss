@@ -43,9 +43,7 @@ body {
 
 .ChatWindow {
   flex: 0 0 500px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  display: block;
   box-shadow: 0px 0px 5px $grey-color;
   background-color: $white-color;
 
@@ -57,7 +55,7 @@ body {
 }
 
 .MessageForm {
-  flex: 0 0 100px;
+  height: 300px;
 
   textarea {
     width: 400px;
@@ -77,10 +75,9 @@ body {
 }
 
 .MessagesBlock {
+  height: 465px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 100%;
+  flex-direction: column-reverse;
   overflow-x: hidden;
   overflow-y: scroll;
 }

@@ -39,7 +39,7 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
     def open(self, user_id):
         # TODO some checks
 
-        self.user = user_id
+        self.user_id = user_id
 
         yield tornado.gen.Task(self.client.subscribe, 'user_{}'.format(user_id))
         self.client.listen(self.perform_action)

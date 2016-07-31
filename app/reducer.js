@@ -1,4 +1,5 @@
 const initialState = {
+  currentUser: {},
   users: [{'username': 'first'}, {'username': 'second'}, {'username': 'third'}],
   chats: [{'id': '1'}, {'id': '2'}, {'id': '3'}],
   selectedChat: '',
@@ -25,6 +26,8 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       messages[state.selectedChat] = action.chatMessages;
       return Object.assign({}, state, { messages });
+    case 'RECEIVE_CURRENT_USER':
+      return Object.assign({}, state, { currentUser: action.user })
     case 'RECEIVE_USERS':
       return Object.assign({}, state, { users: action.users });
     case 'RECEIVE_CHATS':

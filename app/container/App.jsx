@@ -5,7 +5,7 @@ import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
 import UsersList from './UsersList';
 
-const App = ({selectedChat}) => {
+const App = ({selectedChat}) => {  
   return <div className="Container">
     <ChatsList selectedChat={selectedChat} />
     <ChatWindow selectedChat={selectedChat} />

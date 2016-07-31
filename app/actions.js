@@ -1,5 +1,5 @@
 import {createChat as _createChat, loadChatMessages as _loadChatMessages,
-  getAllUsers, getUserChats} from 'utils/apiCalls';
+  getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
 
 export const selectChat = (chatId) => ({
   type: 'SELECT_CHAT',
@@ -24,6 +24,14 @@ export const loadChatMessages = (chatId) => {
   return dispatch => {
     _loadChatMessages(chatId).then(chatMessages => {
       dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatMessages });
+    });
+  };
+};
+
+export const initialFetchCurrentUser = () => {
+  return dispatch => {
+    getCurrentUser().then(user => {
+      dispatch({ type: 'RECEIVE_CURRENT_USER', user });
     });
   };
 };

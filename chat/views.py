@@ -17,6 +17,16 @@ def home(request):
     return render(request, 'index.html', {})
 
 
+def get_current_user_api(request):
+    user = request.user
+
+    context = {
+        'user_id': user.id,
+        'userrname': user.username
+    }
+
+    return json_response(context)
+
 def get_all_users_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')

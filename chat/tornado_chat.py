@@ -20,12 +20,44 @@ c.connect()
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
+            (r'/chat_app/(?P<user_id>\d+)/', ChatAppHandler),
             (r'/tornado_chat/(?P<chat_id>\d+)/', TornadoChatHandler),
         ]
         settings = dict(
             debug=True,
         )
         tornado.web.Application.__init__(self, handlers, **settings)
+
+
+class ChatAppHandler(tornado.websocket.WebSocketHandler):
+    def __init__(self, *args, **kwargs):
+        super(ChatAppHandler, self).__init__(*args, **kwargs)
+        self.client = tornadoredis.Client()
+        self.client.connect()
+
+    @tornado.gen.engine
+    def open(self, user_id):
+        # TODO some checks
+
+        self.user = user_id
+
+        yield tornado.gen.Task(self.client.subscribe, 'user_{}'.format(user_id))
+        self.client.listen(self.perform_action)
+
+    def check_origin(self, origin):
+        if origin == 'http://127.0.0.1:8000':
+            return True
+        else:
+            return False
+
+    def perform_action(self, action):
+        pass
+
+    def on_close(self):
+        if self.client.subscribed:
+            self.client.unsubscribe('user_{}'.format(self.user_id))
+            self.client.disconnect()
+
 
 
 class TornadoChatHandler(tornado.websocket.WebSocketHandler):

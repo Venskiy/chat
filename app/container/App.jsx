@@ -31,7 +31,8 @@ const App = React.createClass({
 
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser,
-  selectedChat: state.selectedChat
+  selectedChat: state.selectedChat,
+  messages: state.messages
 });
 
 export default connect(mapStateToProps)(App)

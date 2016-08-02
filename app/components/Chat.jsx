@@ -17,6 +17,7 @@ export default React.createClass({
 
     return <div className={className} onClick={this.handleClick}>
       {chat.chat_id}
+      {chat.last_message}
     </div>;
   }
 });

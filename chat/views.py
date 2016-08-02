@@ -59,6 +59,7 @@ def get_user_chats_api(request):
 
         chat = {
             'chat_id': chat_id,
+            'last_message': user_chat.messages.latest('timestamp').text,
             'interlocutor_id': interlocutor_id,
             'interlocutor_username': interlocutor_username
         }

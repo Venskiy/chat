@@ -17,6 +17,7 @@ def home(request):
     return render(request, 'index.html', {})
 
 
+
 def get_current_user_api(request):
     user = request.user
 
@@ -26,6 +27,7 @@ def get_current_user_api(request):
     }
 
     return json_response(context)
+
 
 def get_all_users_api(request):
     if not request.user.is_authenticated():
@@ -46,10 +48,25 @@ def get_user_chats_api(request):
         return HttpResponse('You are not loged in')
 
     user_chats = Chat.objects.filter(participants=request.user)
-    chats_id = list(user_chats.values('id'))
+
+    chats = []
+    for user_chat in user_chats:
+        chat_id = user_chat.id
+
+        interlocutor = user_chat.participants.exclude(id=request.user.id).first()
+        interlocutor_id = interlocutor.id
+        interlocutor_username = interlocutor.username
+
+        chat = {
+            'chat_id': chat_id,
+            'interlocutor_id': interlocutor_id,
+            'interlocutor_username': interlocutor_username
+        }
+
+        chats.append(chat)
 
     context = {
-        'chats': chats_id
+        'chats': chats
     }
 
     return json_response(context)

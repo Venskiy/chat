@@ -42,7 +42,7 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
         self.user_id = user_id
 
         yield tornado.gen.Task(self.client.subscribe, 'user_{}'.format(user_id))
-        self.client.listen(self.perform_action)
+        self.client.listen(self.handle_action)
 
     def check_origin(self, origin):
         if origin == 'http://127.0.0.1:8000':
@@ -50,8 +50,16 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
         else:
             return False
 
-    def perform_action(self, action):
+    def on_message(self, msg):
         pass
+
+    def handle_action(self, msg):
+        if msg.kind == 'message':
+            self.write_message(msg.body)
+        if msg.kind == 'disconnect':
+            self.write_message('The connection terminated '
+                               'due to a Redis server error.')
+            self.close()
 
     def on_close(self):
         if self.client.subscribed:
@@ -90,7 +98,10 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def on_message(self, msg):
-        c.publish('chat_{}'.format(self.chat_id), msg)
+        msg = json.loads(msg)
+
+        c.publish('chat_{}'.format(self.chat_id), msg['message'])
+        c.publish('user_{}'.format(msg['interlocutorId']), msg['message'])
 
         http_client = tornado.httpclient.AsyncHTTPClient()
         request = tornado.httpclient.HTTPRequest(
@@ -98,7 +109,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             method='POST',
             body=urlencode({
                 'sender_id': self.user_id,
-                'message': msg.encode('utf-8'),
+                'message': msg['message'],
                 'chat_id': self.chat_id,
                 'api_key': settings.API_KEY,
             })
@@ -106,6 +117,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         http_client.fetch(request, self.handle_request)
 
     def show_new_message(self, msg):
+
         if msg.kind == 'message':
             self.write_message(str(msg.body))
         if msg.kind == 'disconnect':

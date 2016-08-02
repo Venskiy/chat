@@ -1,9 +1,9 @@
 import {createChat as _createChat, loadChatMessages as _loadChatMessages,
   getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
 
-export const selectChat = (chatId) => ({
+export const selectChat = (chat) => ({
   type: 'SELECT_CHAT',
-  chatId
+  chat
 });
 
 export const addChatMessage = (chatId, message) => ({

@@ -2,21 +2,21 @@ import React from 'react';
 
 export default React.createClass({
   propTypes: {
-    chatId: React.PropTypes.string.isRequired,
-    selectedChat: React.PropTypes.string.isRequired,
+    chat: React.PropTypes.object.isRequired,
+    selectedChat: React.PropTypes.object.isRequired,
     onSelect: React.PropTypes.func.isRequired
   },
 
   handleClick() {
-    this.props.onSelect(this.props.chatId);
+    this.props.onSelect(this.props.chat);
   },
 
   render () {
-    const {chatId, selectedChat} = this.props;
-    const className = (chatId === selectedChat) ? 'Chat-selected' : 'Chat';
+    const {chat, selectedChat} = this.props;
+    const className = (chat.chat_id === selectedChat.chat_id) ? 'Chat-selected' : 'Chat';
 
     return <div className={className} onClick={this.handleClick}>
-      {chatId}
+      {chat.chat_id}
     </div>;
   }
 });

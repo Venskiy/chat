@@ -6,10 +6,10 @@ import MessagesBlock from 'components/MessagesBlock';
 import MessageForm from 'components/MessageForm';
 
 const ChatWindow = ({selectedChat, messages, onChatMessage}) => {
-  if(selectedChat) {
+  if(Object.keys(selectedChat).length) {
     return <div className="ChatWindow">
-      <MessagesBlock chatMessages={messages[selectedChat]} />
-      <MessageForm chatId={selectedChat} onMessage={onChatMessage} />
+      <MessagesBlock chatMessages={messages[selectedChat.chat_id]} />
+      <MessageForm chat={selectedChat} onMessage={onChatMessage} />
     </div>
   }
   else {

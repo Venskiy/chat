@@ -2,7 +2,7 @@ const initialState = {
   currentUser: {},
   users: [{'username': 'first'}, {'username': 'second'}, {'username': 'third'}],
   chats: [],
-  selectedChat: '',
+  selectedChat: {},
   messages: {'2': [{'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
    {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'} ]}
 };
@@ -11,7 +11,7 @@ export default function(state = initialState, action) {
   let messages;
   switch (action.type) {
     case 'SELECT_CHAT':
-      return Object.assign({}, state, {selectedChat: action.chatId.toString()});
+      return Object.assign({}, state, {selectedChat: action.chat});
     case 'ADD_CHAT_MESSAGE':
       const chatMessages = Array.from(state.messages[action.chatId]);
       chatMessages.unshift({'text': action.message});
@@ -24,7 +24,7 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, {chats: chats});
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
-      messages[state.selectedChat] = action.chatMessages;
+      messages[state.selectedChat.chat_id] = action.chatMessages;
       return Object.assign({}, state, { messages });
     case 'RECEIVE_CURRENT_USER':
       return Object.assign({}, state, { currentUser: action.user })

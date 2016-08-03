@@ -100,8 +100,13 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, msg):
         msg = json.loads(msg)
 
+        message = {
+            'chat_id': self.chat_id,
+            'message': msg['message']
+        }
+
         c.publish('chat_{}'.format(self.chat_id), msg['message'])
-        c.publish('user_{}'.format(msg['interlocutorId']), msg['message'])
+        c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
 
         http_client = tornado.httpclient.AsyncHTTPClient()
         request = tornado.httpclient.HTTPRequest(

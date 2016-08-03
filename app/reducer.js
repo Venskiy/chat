@@ -17,6 +17,7 @@ export default function(state = initialState, action) {
       chatMessages.unshift({'text': action.message});
       messages = Object.assign({}, state.messages);
       messages[action.chatId] = chatMessages;
+      messages[action.chatId].last_message = action.message;
       return Object.assign({}, state, { messages: messages });
     case 'ADD_CHAT':
       let chats = Array.from(state.chats);

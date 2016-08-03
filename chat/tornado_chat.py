@@ -122,7 +122,6 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         http_client.fetch(request, self.handle_request)
 
     def show_new_message(self, msg):
-
         if msg.kind == 'message':
             self.write_message(str(msg.body))
         if msg.kind == 'disconnect':

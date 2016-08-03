@@ -92,6 +92,11 @@ body {
 
 .Message {
   margin: 9px;
+
+  &-unread {
+    margin: 9px;
+    background-color: $light-grey-color;
+  }
 }
 
 .UsersList {

@@ -11,7 +11,8 @@ export default React.createClass({
     if(chatMessages) {
       return <div className="MessagesBlock">
         {chatMessages.map((message, i) => {
-          return <div className="Message" key={i}>{message.text}</div>
+          const className = message.is_read ? 'Message' : 'Message-unread';
+          return <div className={className} key={i}>{message.text}</div>
         })}
       </div>;
     }

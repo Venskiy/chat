@@ -130,3 +130,19 @@ def send_message_api(request):
     chat.messages.add(message_instance)
 
     return json_response({'status': 'ok'})
+
+
+def read_chat_message_api(request):
+    reader_id = request.GET.get('reader_id')
+    chat_id = request.GET.get('chat_id')
+
+    reader = User.objects.get(id=reader_id)
+    chat = Chat.objects.get(id=chat_id)
+
+    unread_messages = chat.messages.filter(is_read=False).exclude(sender=reader)
+
+    for message in unread_messages:
+        message.is_read = True
+        message.save()
+
+    return json_response({'status': 'ok'})

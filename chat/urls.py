@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^create_chat/?$', views.create_chat_api, name='create_chat'),
     url(r'^load_chat_messages/?$', views.load_chat_messages_api, name='load_chat_messages'),
     url(r'^send_message_api/?$', views.send_message_api, name='send_message_api'),
+    url(r'^read_chat_message/?$', views.read_chat_message_api, name='read_chat_message'),
 ]

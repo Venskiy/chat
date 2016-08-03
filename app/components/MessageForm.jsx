@@ -49,7 +49,7 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
-      <textarea ref="message" type="text" placeholder="Type your text here" />
+      <textarea ref="message" type="text" placeholder="Type your text here" autofocus />
       <button onClick={this.handleClick}>Send</button>
     </div>
   }

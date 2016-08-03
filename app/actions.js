@@ -12,6 +12,12 @@ export const addChatMessage = (chatId, message) => ({
   message
 });
 
+export const updateChatLastMessage = (chatId, message) => ({
+  type: 'UPDATE_CHAT_LAST_MESSAGE',
+  chatId,
+  message
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatId => {

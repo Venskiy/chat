@@ -16,7 +16,7 @@ export default React.createClass({
     const className = (chat.chat_id === selectedChat.chat_id) ? 'Chat-selected' : 'Chat';
 
     return <div className={className} onClick={this.handleClick}>
-      {chat.chat_id}
+      {chat.interlocutor_username}
       {chat.last_message}
     </div>;
   }

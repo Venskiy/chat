@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addChatMessage} from 'actions';
+import {updateChatLastMessage} from 'actions';
 
 import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
@@ -12,10 +12,13 @@ const App = React.createClass({
   },
 
   componentWillUpdate(nextProps) {
+    const onNewChatMessage = this.props.onNewChatMessage;
+
     const ws = new WebSocket(`ws://127.0.0.1:8888/chat_app/${nextProps.currentUser.user_id}/`);
 
     ws.onmessage = function(e) {
-      console.log(e.data);
+      const data = JSON.parse(e.data);
+      onNewChatMessage(data.chat_id, data.message);
     };
   },
 
@@ -37,8 +40,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onChatMessage(chatId, message) {
-    dispatch(addChatMessage(chatId, message));
+  onNewChatMessage(chatId, message) {
+    dispatch(updateChatLastMessage(chatId, message));
   }
 });
 

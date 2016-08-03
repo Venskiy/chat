@@ -6,8 +6,8 @@ import Chat from 'components/Chat';
 
 const ChatList = ({chats, selectedChat, onChatSelect}) => {
   return <div className="ChatList">
-    {chats.map(chat => {
-      return <Chat chat={chat} selectedChat={selectedChat} onSelect={onChatSelect} key={chat.chat_id} />
+    {Object.keys(chats).map(key => {
+      return <Chat chat={chats[key]} selectedChat={selectedChat} onSelect={onChatSelect} key={key} />
     })}
   </div>;
 }

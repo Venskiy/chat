@@ -49,7 +49,7 @@ def get_user_chats_api(request):
 
     user_chats = Chat.objects.filter(participants=request.user)
 
-    chats = []
+    chats = {}
     for user_chat in user_chats:
         chat_id = user_chat.id
 
@@ -64,7 +64,7 @@ def get_user_chats_api(request):
             'interlocutor_username': interlocutor_username
         }
 
-        chats.append(chat)
+        chats[chat_id] = chat
 
     context = {
         'chats': chats

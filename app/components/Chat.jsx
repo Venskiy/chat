@@ -16,11 +16,13 @@ export default React.createClass({
   render () {
     const {chat, selectedChat} = this.props;
     const className = (chat.chat_id === selectedChat.chat_id) ? 'Chat-selected' : 'Chat';
+    const lastMessageClassName = chat.last_message_is_read ? 'LastMessage' : 'LastMessage-unread'
     const messageTimestamp = dateFormat(chat.last_message_timestamp, 'mmm d')
 
     return <div className={className} onClick={this.handleClick}>
       {chat.interlocutor_username}
-      {chat.last_message}
+
+      <div className={lastMessageClassName}>{chat.last_message}</div>
       {messageTimestamp}
     </div>;
   }

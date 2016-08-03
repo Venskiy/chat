@@ -50,22 +50,24 @@ def get_user_chats_api(request):
     user_chats = Chat.objects.filter(participants=request.user)
 
     chats = {}
-    for user_chat in user_chats:
-        chat_id = user_chat.id
+    if user_chats:
+        for user_chat in user_chats:
+            chat_id = user_chat.id
 
-        interlocutor = user_chat.participants.exclude(id=request.user.id).first()
+            interlocutor = user_chat.participants.exclude(id=request.user.id).first()
 
-        last_message = user_chat.messages.latest('timestamp')
+            last_message = user_chat.messages.latest('timestamp')
 
-        chat = {
-            'chat_id': chat_id,
-            'last_message': last_message.text,
-            'last_message_timestamp': last_message.timestamp,
-            'interlocutor_id': interlocutor.id,
-            'interlocutor_username': interlocutor.username
-        }
+            chat = {
+                'chat_id': chat_id,
+                'last_message': last_message.text,
+                'last_message_timestamp': last_message.timestamp,
+                'last_message_is_read': last_message.is_read,
+                'interlocutor_id': interlocutor.id,
+                'interlocutor_username': interlocutor.username
+            }
 
-        chats[chat_id] = chat
+            chats[chat_id] = chat
 
     context = {
         'chats': chats
@@ -84,6 +86,9 @@ def create_chat_api(request):
 
     chat = Chat.objects.create()
     chat.participants.add(request.user, recipient)
+    initial_message = Message(text='{} started the conversation!'.format(request.user.username), sender=request.user)
+    initial_message.save()
+    chat.messages.add(initial_message)
 
     return json_response({'chat_id': chat.id})
 

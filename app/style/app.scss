@@ -41,6 +41,14 @@ body {
   background-color: $light-grey-color;
 }
 
+.LastMessage {
+  width: 50px;
+
+  &-unread {
+    background-color: $light-grey-color;
+  }
+}
+
 .ChatWindow {
   flex: 0 0 500px;
   display: block;

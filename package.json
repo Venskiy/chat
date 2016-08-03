@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Venskiy/chat#readme",
   "dependencies": {
+    "dateformat": "^1.0.12",
     "es6-promise": "^3.2.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",

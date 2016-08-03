@@ -54,14 +54,15 @@ def get_user_chats_api(request):
         chat_id = user_chat.id
 
         interlocutor = user_chat.participants.exclude(id=request.user.id).first()
-        interlocutor_id = interlocutor.id
-        interlocutor_username = interlocutor.username
+
+        last_message = user_chat.messages.latest('timestamp')
 
         chat = {
             'chat_id': chat_id,
-            'last_message': user_chat.messages.latest('timestamp').text,
-            'interlocutor_id': interlocutor_id,
-            'interlocutor_username': interlocutor_username
+            'last_message': last_message.text,
+            'last_message_timestamp': last_message.timestamp,
+            'interlocutor_id': interlocutor.id,
+            'interlocutor_username': interlocutor.username
         }
 
         chats[chat_id] = chat

@@ -1,5 +1,5 @@
 require('es6-promise').polyfill();
-require('whatwg-fetch')
+require('whatwg-fetch');
 
 import ReactDOM from 'react-dom';
 import React from 'react';

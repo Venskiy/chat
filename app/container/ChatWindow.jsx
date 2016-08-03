@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addChatMessage} from 'actions';
+import {addChatMessage, updateChatLastMessage} from 'actions';
 
 import MessagesBlock from 'components/MessagesBlock';
 import MessageForm from 'components/MessageForm';
@@ -24,6 +24,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onChatMessage(chatId, message) {
     dispatch(addChatMessage(chatId, message));
+    dispatch(updateChatLastMessage(chatId, message));
   }
 });
 

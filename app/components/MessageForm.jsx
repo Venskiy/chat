@@ -5,7 +5,8 @@ let ws;
 export default React.createClass({
   propTypes: {
     chat: React.PropTypes.object.isRequired,
-    onMessage: React.PropTypes.func.isRequired
+    onMessage: React.PropTypes.func.isRequired,
+    onRead: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
@@ -19,8 +20,14 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps) {
+    const {chat, onRead} = nextProps;
+
+    if(!chat.last_message_is_read) {
+      onRead(chat.chat_id);
+    }
+
     // TODO make return value more beautyful:)
-    if(nextProps.chat.chat_id === this.props.chat.chat_id) {
+    if(chat.chat_id === this.props.chat.chat_id) {
       return false;
     }
     else {

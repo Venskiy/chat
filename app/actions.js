@@ -18,6 +18,11 @@ export const updateChatLastMessage = (chatId, message) => ({
   message
 });
 
+export const readChatMessage = (chatId) => ({
+  type: 'READ_CHAT_MESSAGE',
+  chatId
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatId => {

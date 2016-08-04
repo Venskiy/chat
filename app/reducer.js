@@ -23,6 +23,23 @@ export default function(state = initialState, action) {
       chats = Object.assign({}, state.chats);
       chats[action.chatId].last_message = action.message;
       return  Object.assign({}, state, { chats });
+    case 'READ_CHAT_MESSAGE':
+      if(state.messages[action.chatId]) {
+        chats = Object.assign({}, state.chats);
+        chats[action.chatId].last_message_is_read = true;
+        const selectedChat = Object.assign({}, state.selectedChat, {last_message_is_read: true});
+        messages = Object.assign({}, state.messages);
+        for(let i = 0; i < messages[action.chatId].length; ++i) {
+          if(messages[action.chatId][i].is_read) {
+            break;
+          }
+          else {
+            messages[action.chatId][i].is_read = true;
+          }
+        }
+        return Object.assign({}, state, { chats }, { selectedChat }, { messages });
+      }
+      return Object.assign({}, state);
     case 'ADD_CHAT':
       chats = Array.from(state.chats);
       chats.push(action.chat_id);

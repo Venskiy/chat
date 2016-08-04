@@ -143,6 +143,6 @@ def read_chat_message_api(request):
 
     for message in unread_messages:
         message.is_read = True
-        message.save()
+        message
 
     return json_response({'status': 'ok'})

@@ -1,19 +1,13 @@
 import {createChat as _createChat, loadChatMessages as _loadChatMessages,
   getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
 
-export const selectChat = (chat) => ({
+export const selectChat = (chatId) => ({
   type: 'SELECT_CHAT',
-  chat
+  chatId
 });
 
-export const addChatMessage = (chatId, message) => ({
-  type: 'ADD_CHAT_MESSAGE',
-  chatId,
-  message
-});
-
-export const updateChatLastMessage = (chatId, message) => ({
-  type: 'UPDATE_CHAT_LAST_MESSAGE',
+export const addNewChatMessage = (chatId, message) => ({
+  type: 'ADD_NEW_CHAT_MESSAGE',
   chatId,
   message
 });
@@ -34,7 +28,7 @@ export const createChat = (username) => {
 export const loadChatMessages = (chatId) => {
   return dispatch => {
     _loadChatMessages(chatId).then(chatMessages => {
-      dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatMessages });
+      dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatId, chatMessages });
     });
   };
 };

@@ -1,7 +1,9 @@
 import os.path
 import json
+from datetime import datetime
 from urllib.parse import urlencode
 from importlib import import_module
+from chat.utils import date_handler
 
 import tornado.httpserver
 import tornado.web
@@ -105,11 +107,15 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             message = {
                 'type': msg['type'],
                 'chat_id': self.chat_id,
-                'message': msg['message']
+                'message': {
+                    'text': msg['message'],
+                    'sender_id': self.user_id,
+                    'timestamp': datetime.now()
+                }
             }
 
-            c.publish('chat_{}'.format(self.chat_id), msg['message'])
-            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
+            c.publish('user_{}'.format(self.user_id), json.dumps(message, default=date_handler))
+            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message, default=date_handler))
 
             request = tornado.httpclient.HTTPRequest(
                 ''.join([settings.SEND_MESSAGE_API_URL, "/",]),
@@ -123,8 +129,13 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             )
             http_client.fetch(request, self.handle_request)
         elif msg['type'] == 'READ_MESSAGE':
-            c.publish('user_{}'.format(self.user_id), json.dumps(msg))
-            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(msg))
+            message = {
+                'type': msg['type'],
+                'chat_id': self.chat_id
+            }
+            
+            c.publish('user_{}'.format(self.user_id), json.dumps(message))
+            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
 
             request = tornado.httpclient.HTTPRequest(
                 ''.join([settings.READ_MESSAGE_API_URL, "/",]),

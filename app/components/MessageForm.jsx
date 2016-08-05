@@ -11,20 +11,13 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    const {chat, onMessage} = this.props;
+    const {chat} = this.props;
 
     ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.chat_id}/`);
 
-    ws.onmessage = function(e) {
-      onMessage(chat.chat_id, e.data);
-    };
-  },
-
-  shouldComponentUpdate(nextProps) {
-    const {chat, onRead} = nextProps;
-
     // TODO switch to other checks
-    if(!chat.last_message_is_read && chat.last_message_sender_id === chat.interlocutor_id) {
+    if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
+      console.log(' i am gonna read messages');
       const message = {
         type: 'READ_MESSAGE',
         interlocutorId: chat.interlocutor_id,
@@ -34,23 +27,28 @@ export default React.createClass({
         ws.send(JSON.stringify(message));
       });
     }
-
-    // TODO make return value more beautyful:)
-    if(chat.chat_id === this.props.chat.chat_id) {
-      return false;
-    }
-    else {
-      return true;
-    }
   },
 
   componentWillUpdate(nextProps) {
-    ws.close();
-    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.chat_id}/`);
+    const {chat} = nextProps;
 
-    ws.onmessage = function(e) {
-      nextProps.onMessage(nextProps.chat.chat_id, e.data);
-    };
+    if(chat.chat_id !== this.props.chat.chat_id) {
+      ws.close();
+      ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.chat_id}/`);
+    }
+
+    // TODO switch to other checks
+    if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
+      console.log(' i am gonna read messages');
+      const message = {
+        type: 'READ_MESSAGE',
+        interlocutorId: chat.interlocutor_id,
+      }
+
+      waitForSocketConnection(ws, function() {
+        ws.send(JSON.stringify(message));
+      });
+    }
   },
 
   handleClick() {
@@ -65,6 +63,7 @@ export default React.createClass({
   },
 
   render() {
+    console.log(this.props.chat);
     return <div className="MessageForm">
       <textarea ref="message" type="text" placeholder="Type your text here" />
       <button onClick={this.handleClick}>Send</button>

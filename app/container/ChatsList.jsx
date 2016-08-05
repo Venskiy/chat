@@ -25,9 +25,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onChatSelect(chat) {
-    dispatch(loadChatMessages(chat.chat_id));
-    dispatch(selectChat(chat));
+  onChatSelect(chatId) {
+    dispatch(loadChatMessages(chatId));
+    dispatch(selectChat(chatId));
   }
 });
 

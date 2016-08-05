@@ -99,27 +99,39 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, msg):
         msg = json.loads(msg)
-
-        message = {
-            'chat_id': self.chat_id,
-            'message': msg['message']
-        }
-
-        c.publish('chat_{}'.format(self.chat_id), msg['message'])
-        c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
-
         http_client = tornado.httpclient.AsyncHTTPClient()
-        request = tornado.httpclient.HTTPRequest(
-            ''.join([settings.SEND_MESSAGE_API_URL, "/",]),
-            method='POST',
-            body=urlencode({
-                'sender_id': self.user_id,
-                'message': msg['message'],
+
+        if msg['type'] == 'SEND_MESSAGE':
+            message = {
                 'chat_id': self.chat_id,
-                'api_key': settings.API_KEY,
-            })
-        )
-        http_client.fetch(request, self.handle_request)
+                'message': msg['message']
+            }
+
+            c.publish('chat_{}'.format(self.chat_id), msg['message'])
+            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
+
+            request = tornado.httpclient.HTTPRequest(
+                ''.join([settings.SEND_MESSAGE_API_URL, "/",]),
+                method='POST',
+                body=urlencode({
+                    'sender_id': self.user_id,
+                    'message': msg['message'],
+                    'chat_id': self.chat_id,
+                    'api_key': settings.API_KEY,
+                })
+            )
+            http_client.fetch(request, self.handle_request)
+        elif msg['type'] == 'READ_MESSAGE':
+            request = tornado.httpclient.HTTPRequest(
+                ''.join([settings.READ_MESSAGE_API_URL, "/",]),
+                method='POST',
+                body=urlencode({
+                    'reader_id': self.user_id,
+                    'chat_id': self.chat_id
+                })
+            )
+            http_client.fetch(request, self.handle_request)
+
 
     def show_new_message(self, msg):
         if msg.kind == 'message':

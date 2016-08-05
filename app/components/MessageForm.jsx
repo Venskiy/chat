@@ -23,7 +23,12 @@ export default React.createClass({
     const {chat, onRead} = nextProps;
 
     if(!chat.last_message_is_read) {
-      onRead(chat.chat_id);
+      const message = {
+        type: 'READ_MESSAGE',
+        interlocutorId: chat.interlocutor_id,
+      }
+
+      ws.send(JSON.stringify(message));
     }
 
     // TODO make return value more beautyful:)
@@ -46,6 +51,7 @@ export default React.createClass({
 
   handleClick() {
     const message = {
+      type: 'SEND_MESSAGE',
       interlocutorId: this.props.chat.interlocutor_id,
       message: this.refs.message.value
     }
@@ -56,7 +62,7 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
-      <textarea ref="message" type="text" placeholder="Type your text here" autofocus />
+      <textarea ref="message" type="text" placeholder="Type your text here" />
       <button onClick={this.handleClick}>Send</button>
     </div>
   }

@@ -132,9 +132,10 @@ def send_message_api(request):
     return json_response({'status': 'ok'})
 
 
+@csrf_exempt
 def read_chat_message_api(request):
-    reader_id = request.GET.get('reader_id')
-    chat_id = request.GET.get('chat_id')
+    reader_id = request.POST.get('reader_id')
+    chat_id = request.POST.get('chat_id')
 
     reader = User.objects.get(id=reader_id)
     chat = Chat.objects.get(id=chat_id)
@@ -143,6 +144,6 @@ def read_chat_message_api(request):
 
     for message in unread_messages:
         message.is_read = True
-        message
+        message.save()
 
     return json_response({'status': 'ok'})

@@ -14,10 +14,13 @@ export default React.createClass({
     const {chat} = this.props;
 
     ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.chat_id}/`);
+  },
+
+  componentDidMount() {
+    const {chat} = this.props;
 
     // TODO switch to other checks
     if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
-      console.log(' i am gonna read messages');
       const message = {
         type: 'READ_MESSAGE',
         interlocutorId: chat.interlocutor_id,
@@ -36,10 +39,13 @@ export default React.createClass({
       ws.close();
       ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.chat_id}/`);
     }
+  },
+
+  componentDidUpdate() {
+    const {chat} = this.props;
 
     // TODO switch to other checks
     if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
-      console.log(' i am gonna read messages');
       const message = {
         type: 'READ_MESSAGE',
         interlocutorId: chat.interlocutor_id,

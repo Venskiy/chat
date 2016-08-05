@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {waitForSocketConnection} from 'utils/utils';
+
 let ws;
 
 export default React.createClass({
@@ -22,13 +24,16 @@ export default React.createClass({
   shouldComponentUpdate(nextProps) {
     const {chat, onRead} = nextProps;
 
-    if(!chat.last_message_is_read) {
+    // TODO switch to other checks
+    if(!chat.last_message_is_read && chat.last_message_sender_id === chat.interlocutor_id) {
       const message = {
         type: 'READ_MESSAGE',
         interlocutorId: chat.interlocutor_id,
       }
 
-      ws.send(JSON.stringify(message));
+      waitForSocketConnection(ws, function() {
+        ws.send(JSON.stringify(message));
+      });
     }
 
     // TODO make return value more beautyful:)

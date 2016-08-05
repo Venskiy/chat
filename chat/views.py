@@ -61,6 +61,7 @@ def get_user_chats_api(request):
             chat = {
                 'chat_id': chat_id,
                 'last_message': last_message.text,
+                'last_message_sender_id': last_message.sender.id,
                 'last_message_timestamp': last_message.timestamp,
                 'last_message_is_read': last_message.is_read,
                 'interlocutor_id': interlocutor.id,

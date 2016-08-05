@@ -7,8 +7,7 @@ let ws;
 export default React.createClass({
   propTypes: {
     chat: React.PropTypes.object.isRequired,
-    onMessage: React.PropTypes.func.isRequired,
-    onRead: React.PropTypes.func.isRequired
+    onMessage: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {

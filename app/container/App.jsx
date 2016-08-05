@@ -18,7 +18,14 @@ const App = React.createClass({
 
     ws.onmessage = function(e) {
       const data = JSON.parse(e.data);
-      onNewChatMessage(data.chat_id, data.message);
+      console.log(`onmeesage${data}`);
+      if(data.type === 'SEND_MESSAGE') {
+        console.log(data);
+        onNewChatMessage(data.chat_id, data.message);
+      }
+      else if(data.type === 'READ_MESSAGE') {
+        console.log(data);
+      }
     };
   },
 

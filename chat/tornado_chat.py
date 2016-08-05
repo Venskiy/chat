@@ -103,6 +103,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
 
         if msg['type'] == 'SEND_MESSAGE':
             message = {
+                'type': msg['type'],
                 'chat_id': self.chat_id,
                 'message': msg['message']
             }
@@ -122,6 +123,9 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             )
             http_client.fetch(request, self.handle_request)
         elif msg['type'] == 'READ_MESSAGE':
+            c.publish('user_{}'.format(self.user_id), json.dumps(msg))
+            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(msg))
+
             request = tornado.httpclient.HTTPRequest(
                 ''.join([settings.READ_MESSAGE_API_URL, "/",]),
                 method='POST',

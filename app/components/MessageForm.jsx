@@ -97,6 +97,7 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
+      {this.props.chat.is_interlocutor_typing ? <div>Typing</div> : <div>No</div>}
       <textarea ref="message" type="text" placeholder="Type your text here" onKeyPress={this.handleKeyPress} />
       <button onClick={this.handleClick}>Send</button>
     </div>

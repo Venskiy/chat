@@ -24,7 +24,7 @@ export default React.createClass({
         <span>{chat.interlocutor_username}</span>
         <div className="Timestamp">{messageTimestamp}</div>
       </div>
-      <div className={lastMessageClassName}>{chat.last_message}</div>
+      {chat.is_interlocutor_typing ? <div>Typing</div> : <div className={lastMessageClassName}>{chat.last_message}</div>}
     </div>;
   }
 });

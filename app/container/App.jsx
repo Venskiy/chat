@@ -10,7 +10,7 @@ const App = React.createClass({
 
   componentWillUpdate(nextProps) {
     if(nextProps.currentUser !== this.props.currentUser) {
-      const {onNewChatMessage, onMessageRead} = this.props;
+      const {onNewChatMessage, onMessageRead, onInterlocutorTyping} = this.props;
 
       const ws = new WebSocket(`ws://127.0.0.1:8888/chat_app/${nextProps.currentUser.user_id}/`);
 

@@ -133,7 +133,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 'type': msg['type'],
                 'chat_id': self.chat_id
             }
-            
+
             c.publish('user_{}'.format(self.user_id), json.dumps(message))
             c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
 
@@ -146,7 +146,13 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 })
             )
             http_client.fetch(request, self.handle_request)
+        elif msg['type'] == 'IS_USER_TYPING':
+            message = {
+                'type': msg['type'],
+                'chat_id': self.chat_id
+            }
 
+            c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
 
     def show_new_message(self, msg):
         if msg.kind == 'message':

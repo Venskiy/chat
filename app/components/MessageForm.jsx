@@ -43,14 +43,6 @@ export default React.createClass({
     }
   },
 
-  componentWillUnmount() {
-    if(isTyping) {
-      clearTimeout(timeout);
-      isTyping = false;
-      console.log('stop');
-    }
-  },
-
   componentDidUpdate() {
     const {chat} = this.props;
 
@@ -67,16 +59,28 @@ export default React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    const {chat} = this.props;
+
+    if(isTyping) {
+      clearTimeout(timeout);
+      isTyping = false;
+      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
+    }
+  },
+
   handleKeyPress() {
+    const {chat} = this.props;
+
     clearTimeout(timeout);
     const value = this.refs.message.value;
     if(!isTyping) {
       isTyping = true;
-      console.log(`start ${value}`);
+      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
     }
     timeout =  setTimeout(function() {
       isTyping = false;
-      console.log(`stop ${value}`);
+      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
     }, 3000)
   },
 

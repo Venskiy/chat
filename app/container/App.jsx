@@ -22,6 +22,9 @@ const App = React.createClass({
         else if(data.type === 'READ_MESSAGE') {
           onMessageRead(data.chat_id);
         }
+        else if(data.type === 'IS_USER_TYPING') {
+          console.log(data);
+        }
       };
     }
   },

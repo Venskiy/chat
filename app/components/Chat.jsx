@@ -16,15 +16,34 @@ export default React.createClass({
   render () {
     const {chat, selectedChat} = this.props;
     const className = (chat.chat_id === selectedChat) ? 'Chat-selected' : 'Chat';
-    const lastMessageClassName = chat.last_message_is_read ? 'LastMessage' : 'LastMessage-unread'
-    const messageTimestamp = dateFormat(chat.last_message_timestamp, 'mmm d')
+    const lastMessageClassName = chat.last_message_is_read ? 'LastMessage' : 'LastMessage-unread';
+    const lastMessageTimestamp = new Date(chat.last_message_timestamp);
+    const currentDate = new Date();
+    let messageTimestamp;
+
+    console.log(lastMessageTimestamp);
+    console.log(typeof(currentDate));
+
+    if(currentDate.getYear() !== lastMessageTimestamp.getYear()) {
+      messageTimestamp = dateFormat(lastMessageTimestamp, 'mmm d yyyy');
+    }
+    else if(currentDate.getDate() === lastMessageTimestamp.getDate()) {
+      messageTimestamp = dateFormat(lastMessageTimestamp, 'h:MM TT');
+    }
+    else if((currentDate.getDate() - 1) === lastMessageTimestamp.getDate())
+      messageTimestamp = 'yesterday';
+    else {
+      messageTimestamp = dateFormat(lastMessageTimestamp, 'mmm d');
+    }
 
     return <div className={className} onClick={this.handleClick}>
       <div className="ChatInfo">
         <span>{chat.interlocutor_username}</span>
         <div className="Timestamp">{messageTimestamp}</div>
       </div>
-      {chat.is_interlocutor_typing ? <div>Typing</div> : <div className={lastMessageClassName}>{chat.last_message}</div>}
+      <div className={lastMessageClassName}>
+        {chat.is_interlocutor_typing ? Typing : chat.last_message}
+      </div>
     </div>;
   }
 });

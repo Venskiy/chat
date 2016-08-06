@@ -24,8 +24,19 @@ export const changeIsTypingState = (chatId) => ({
 
 export const createChat = (username) => {
   return dispatch => {
-    _createChat(username).then(chatId => {
-      dispatch({ type: 'ADD_CHAT', chatId });
+    _createChat(username).then(chatInfo => {
+      if(chatInfo.type === 'CHAT_ALREADY_EXISTS') {
+        const chatId = chatInfo.chat_id;
+
+        dispatch(loadChatMessages(chatId));
+        dispatch({ type: 'SELECT_CHAT', chatId })
+      }
+      else if(chatInfo.type === 'CHAT_NEW') {
+        const chatId = chatInfo.chat.chat_id;
+
+        dispatch({ type: 'CREATE_CHAT', chatInfo });
+        dispatch({ type: 'SELECT_CHAT', chatId })
+      }
     });
   };
 };

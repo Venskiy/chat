@@ -24,7 +24,7 @@ def get_current_user_api(request):
 
     context = {
         'user_id': user.id,
-        'userrname': user.username
+        'username': user.username
     }
 
     return json_response(context)
@@ -90,13 +90,29 @@ def create_chat_api(request):
 
     recipient = User.objects.get(username=username)
 
+    chat = Chat.objects.filter(participants=recipient).filter(participants=request.user)
+    if chat.exists():
+        chat = chat.first()
+        return json_response({'type': 'CHAT_ALREADY_EXISTS', 'chat_id': chat.id})
+
     chat = Chat.objects.create()
     chat.participants.add(request.user, recipient)
     initial_message = Message(text='{} started the conversation!'.format(request.user.username), sender=request.user)
     initial_message.save()
     chat.messages.add(initial_message)
 
-    return json_response({'chat_id': chat.id})
+    chat_info = {
+        'chat_id': chat.id,
+        'last_message': initial_message.text,
+        'last_message_sender_id': request.user.id,
+        'last_message_timestamp': initial_message.timestamp,
+        'last_message_is_read': False,
+        'interlocutor_id': recipient.id,
+        'interlocutor_username': recipient.username,
+        'is_interlocutor_typing': False
+    }
+
+    return json_response({'type': 'CHAT_NEW', 'chat': chat_info})
 
 
 @csrf_exempt

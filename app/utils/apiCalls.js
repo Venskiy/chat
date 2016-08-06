@@ -5,7 +5,7 @@ export const createChat = (username) => {
       credentials: 'same-origin'
     })
     .then(response => {
-      response.json().then(response => resolve(response.chat_id));
+      response.json().then(response => resolve(response));
     });
   });
 };

@@ -10,13 +10,14 @@ const initialState = {
 export default function(state = initialState, action) {
   let chats;
   let messages;
+  let chatMessages
   switch (action.type) {
     case 'SELECT_CHAT':
       return Object.assign({}, state, {selectedChat: action.chatId});
     case 'ADD_NEW_CHAT_MESSAGE':
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
-        const chatMessages = Array.from(state.messages[action.chatId]);
+        chatMessages = Array.from(state.messages[action.chatId]);
         chatMessages.unshift({'text': action.message.text,
                               'sender__username': action.message.sender_username,
                               'timestamp': action.message.timestamp,
@@ -53,10 +54,16 @@ export default function(state = initialState, action) {
         chats[action.chatId].is_interlocutor_typing = true;
       }
       return Object.assign({}, state, { chats });
-    case 'ADD_CHAT':
-      chats = Array.from(state.chats);
-      chats.push(action.chat_id);
-      return Object.assign({}, state, {chats: chats});
+    case 'CREATE_CHAT':
+      chats = Object.assign({}, state.chats);
+      messages = Object.assign({}, state.messages);
+      chats[action.chatInfo.chat.chat_id] = action.chatInfo.chat;
+      chatMessages = [{'text': action.chatInfo.chat.last_message,
+                       'sender__username': state.currentUser.username,
+                       'timestamp': action.chatInfo.chat.last_message_timestamp,
+                       'is_read': false}];
+      messages[action.chatInfo.chat.chat_id] = chatMessages;
+      return Object.assign({}, state, { chats }, { messages });
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
       messages[action.chatId] = action.chatMessages;

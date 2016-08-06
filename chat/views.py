@@ -107,7 +107,7 @@ def load_chat_messages_api(request):
     chat_id = request.GET.get('chat_id')
 
     chat = Chat.objects.get(id=chat_id)
-    chat_messages = list(chat.messages.all().values('text', 'timestamp', 'is_read'))
+    chat_messages = list(chat.messages.all().values('text', 'sender__username', 'timestamp', 'is_read'))
 
     context = {
         'chat_messages': chat_messages

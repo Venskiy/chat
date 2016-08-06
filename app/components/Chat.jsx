@@ -1,6 +1,5 @@
 import React from 'react';
-
-const dateFormat = require('dateformat');
+import dateFormat from 'dateformat';
 
 export default React.createClass({
   propTypes: {
@@ -20,9 +19,6 @@ export default React.createClass({
     const lastMessageTimestamp = new Date(chat.last_message_timestamp);
     const currentDate = new Date();
     let messageTimestamp;
-
-    console.log(lastMessageTimestamp);
-    console.log(typeof(currentDate));
 
     if(currentDate.getYear() !== lastMessageTimestamp.getYear()) {
       messageTimestamp = dateFormat(lastMessageTimestamp, 'mmm d yyyy');

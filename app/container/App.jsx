@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addNewChatMessage, readChatMessage} from 'actions';
+import {addNewChatMessage, readChatMessage, changeIsTypingState} from 'actions';
 
 import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
@@ -23,7 +23,7 @@ const App = React.createClass({
           onMessageRead(data.chat_id);
         }
         else if(data.type === 'IS_USER_TYPING') {
-          console.log(data);
+          onInterlocutorTyping(data.chat_id);
         }
       };
     }
@@ -56,6 +56,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onMessageRead(chatId) {
     dispatch(readChatMessage(chatId));
+  },
+
+  onInterlocutorTyping(chatId) {
+    dispatch(changeIsTypingState(chatId));
   }
 });
 

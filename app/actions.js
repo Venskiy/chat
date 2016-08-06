@@ -17,6 +17,11 @@ export const readChatMessage = (chatId) => ({
   chatId
 });
 
+export const changeIsTypingState = (chatId) => ({
+  type: 'CHANGE_IS_TYPING_STATE',
+  chatId
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatId => {

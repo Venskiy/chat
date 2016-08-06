@@ -3,6 +3,8 @@ import React from 'react';
 import {waitForSocketConnection} from 'utils/utils';
 
 let ws;
+let timeout;
+let isTyping = false;
 
 export default React.createClass({
   propTypes: {
@@ -41,6 +43,14 @@ export default React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    if(isTyping) {
+      clearTimeout(timeout);
+      isTyping = false;
+      console.log('stop');
+    }
+  },
+
   componentDidUpdate() {
     const {chat} = this.props;
 
@@ -57,6 +67,19 @@ export default React.createClass({
     }
   },
 
+  handleKeyPress() {
+    clearTimeout(timeout);
+    const value = this.refs.message.value;
+    if(!isTyping) {
+      isTyping = true;
+      console.log(`start ${value}`);
+    }
+    timeout =  setTimeout(function() {
+      isTyping = false;
+      console.log(`stop ${value}`);
+    }, 3000)
+  },
+
   handleClick() {
     const message = {
       type: 'SEND_MESSAGE',
@@ -70,7 +93,7 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
-      <textarea ref="message" type="text" placeholder="Type your text here" />
+      <textarea ref="message" type="text" placeholder="Type your text here" onKeyPress={this.handleKeyPress} />
       <button onClick={this.handleClick}>Send</button>
     </div>
   }

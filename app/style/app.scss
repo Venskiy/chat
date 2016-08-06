@@ -83,7 +83,7 @@ body {
   height: 25px;
 }
 
-.Timestamp {
+.LastMessageTimestamp {
   float: right;
   margin-top: 5px;
   margin-right: 7px;
@@ -149,10 +149,14 @@ body {
   flex-direction: column-reverse;
   overflow-x: hidden;
   overflow-y: scroll;
+  cursor: pointer;
 }
 
 .MessagesBlockDate {
-  background-color: green;
+  margin-top: 12px;
+  color: $dark-grey-color;
+  font-size: 13px;
+  text-align: center;
 }
 
 .Message {
@@ -162,6 +166,30 @@ body {
     margin: 9px;
     background-color: $light-grey-color;
   }
+}
+
+.MessageInfo {
+  height: 20px;
+}
+
+.MessageSender {
+  float: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #42648b;
+}
+
+.MessageTimestamp {
+  float: right;
+  font-size: 13px;
+  color: #939393;
+}
+
+.MessageText {
+  font-size: 13px;
+  font-weight: 300;
+  color: #000;
+  word-wrap: break-word;
 }
 
 .UsersList {

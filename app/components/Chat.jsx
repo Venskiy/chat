@@ -35,7 +35,7 @@ export default React.createClass({
     return <div className={className} onClick={this.handleClick}>
       <div className="ChatInfo">
         <span>{chat.interlocutor_username}</span>
-        <div className="Timestamp">{messageTimestamp}</div>
+        <div className="LastMessageTimestamp">{messageTimestamp}</div>
       </div>
       <div className={lastMessageClassName}>
         {chat.is_interlocutor_typing ? Typing : chat.last_message}

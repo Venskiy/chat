@@ -13,6 +13,7 @@ import tornado.gen
 import tornadoredis
 
 from django.conf import settings
+from django.contrib.auth.models import User
 
 session_engine = import_module(settings.SESSION_ENGINE)
 
@@ -86,6 +87,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         session = session_engine.SessionStore(session_key)
 
         self.user_id = session['_auth_user_id']
+        self.username = User.objects.get(id=self.user_id).username
 
         yield tornado.gen.Task(self.client.subscribe, 'chat_{}'.format(chat_id))
         self.client.listen(self.show_new_message)
@@ -110,6 +112,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 'message': {
                     'text': msg['message'],
                     'sender_id': self.user_id,
+                    'sender_username': self.username,
                     'timestamp': datetime.now()
                 }
             }

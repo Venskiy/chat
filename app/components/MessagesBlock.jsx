@@ -28,14 +28,17 @@ export default React.createClass({
         }
 
         return <div className={className} key={`message${i}`}>
-          <div className="MessagesBlockDate">
-            {isFirstMessage ? dateFormat(messageTimestamp, 'mmmm d, yyyy') : ''}
+          {isFirstMessage ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
+          <div className="MessageInfo">
+            <div className="MessageSender">
+              {message.sender__username}
+            </div>
+            <div className="MessageTimestamp">
+              {dateFormat(messageTimestamp, 'h:MM:ss TT')}
+            </div>
           </div>
-          <div>{message.sender__username}{dateFormat(messageTimestamp, 'h:MM:ss TT')}</div>
-          <div>{message.text}</div>
-          <div className="MessagesBlockDate">
-            {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy') : ''}
-          </div>
+          <div className="MessageText">{message.text}</div>
+          {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
         </div>
       })}
     </div>;

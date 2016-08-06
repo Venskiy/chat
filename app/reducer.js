@@ -17,7 +17,10 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         const chatMessages = Array.from(state.messages[action.chatId]);
-        chatMessages.unshift({'text': action.message.text, 'timestamp': action.message.timestamp, 'is_read': false});
+        chatMessages.unshift({'text': action.message.text,
+                              'sender__username': action.message.sender_username,
+                              'timestamp': action.message.timestamp,
+                              'is_read': false});
         messages[action.chatId] = chatMessages;
       }
       chats = Object.assign({}, state.chats);

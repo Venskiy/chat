@@ -38,7 +38,7 @@ export default React.createClass({
         <div className="LastMessageTimestamp">{messageTimestamp}</div>
       </div>
       <div className={lastMessageClassName}>
-        {chat.is_interlocutor_typing ? Typing : chat.last_message}
+        {chat.is_interlocutor_typing ? <div className="LoadingDots">{chat.interlocutor_username} is typing</div> : chat.last_message}
       </div>
     </div>;
   }

@@ -97,7 +97,9 @@ export default React.createClass({
 
   render() {
     return <div className="MessageForm">
-      {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
+      <div className="NewsLine">
+        {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
+      </div>
       <textarea ref="message" type="text" placeholder="Type your text here" onKeyPress={this.handleKeyPress} />
       <button onClick={this.handleClick}>Send</button>
     </div>

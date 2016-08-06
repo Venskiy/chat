@@ -50,7 +50,7 @@ body {
       color: $white-color;
     }
 
-    .Timestamp {
+    .LastMessageTimestamp {
       color: $white-color;
     }
 
@@ -61,6 +61,10 @@ body {
         background-color: $dark-grey-color;
         color: $white-color;
       }
+    }
+
+    .LoadingDots {
+      color: $white-color;
     }
   }
 
@@ -124,10 +128,10 @@ body {
 }
 
 .MessageForm {
-  height: 300px;
+  height: 125px;
 
   textarea {
-    width: 400px;
+    width: 390px;
     height: 80px;
     float: left;
     margin: 8px;
@@ -143,8 +147,14 @@ body {
   }
 }
 
+.NewsLine {
+  height: 20px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
 .MessagesBlock {
-  height: 465px;
+  height: 445px;
   display: flex;
   flex-direction: column-reverse;
   overflow-x: hidden;
@@ -218,7 +228,8 @@ body {
 }
 
 .LoadingDots {
-  font-size: 14px;
+  font-size: 13px;
+  color: $dark-grey-color;
 }
 
 .LoadingDots:after {

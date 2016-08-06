@@ -1,3 +1,4 @@
+$dark-grey-color: #696969;
 $grey-color: #ccc;
 $light-grey-color: #eee;
 $white-color: #fff;
@@ -29,23 +30,82 @@ body {
   text-align: center;
   border-bottom: 1px solid $grey-color;
 
+  &:hover {
+    background-color: $light-grey-color;
+  }
+
   &-selected {
+    @extend .Chat;
     height: 50px;
     text-align: center;
     border-bottom: 1px solid $grey-color;
-    background-color: $grey-color;
+    background-color: $dark-grey-color;
+
+    &:hover {
+      background-color: $dark-grey-color;
+    }
+
+    span {
+      color: $white-color;
+    }
+
+    .Timestamp {
+      color: $white-color;
+    }
+
+    .LastMessage {
+      color: $white-color;
+
+      &-unread {
+        background-color: $dark-grey-color;
+        color: $white-color;
+      }
+    }
+  }
+
+
+  span {
+    width: 140px;
+    float: left;
+    font-size: 14px;
+    font-weight: 700;
+    margin-left: 8px;
+    margin-top: 5px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 
-.Chat:hover {
-  background-color: $light-grey-color;
+.ChatInfo {
+  height: 25px;
+}
+
+.Timestamp {
+  float: right;
+  margin-top: 5px;
+  margin-right: 7px;
+  font-size: 13px;
+  color: #939393;
 }
 
 .LastMessage {
-  width: 50px;
+  max-width: 190px;
+  float: left;
+  margin-left: 8px;
+  margin-top: 2px;
+  color: #656565;
+  font-size: 13.5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
 
   &-unread {
+    @extend .LastMessage;
     background-color: $light-grey-color;
+
   }
 }
 

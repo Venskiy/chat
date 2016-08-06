@@ -69,7 +69,6 @@ export default React.createClass({
   },
 
   render() {
-    console.log(this.props.chat);
     return <div className="MessageForm">
       <textarea ref="message" type="text" placeholder="Type your text here" />
       <button onClick={this.handleClick}>Send</button>

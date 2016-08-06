@@ -10,6 +10,7 @@ from chat.utils import json_response
 
 # Create your views here.
 
+
 def home(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login')
@@ -17,7 +18,7 @@ def home(request):
     return render(request, 'index.html', {})
 
 
-
+@csrf_exempt
 def get_current_user_api(request):
     user = request.user
 
@@ -29,6 +30,7 @@ def get_current_user_api(request):
     return json_response(context)
 
 
+@csrf_exempt
 def get_all_users_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -43,6 +45,7 @@ def get_all_users_api(request):
     return json_response(context)
 
 
+@csrf_exempt
 def get_user_chats_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -77,6 +80,7 @@ def get_user_chats_api(request):
     return json_response(context)
 
 
+@csrf_exempt
 def create_chat_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -94,6 +98,7 @@ def create_chat_api(request):
     return json_response({'chat_id': chat.id})
 
 
+@csrf_exempt
 def load_chat_messages_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')

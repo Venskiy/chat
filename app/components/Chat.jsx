@@ -20,9 +20,11 @@ export default React.createClass({
     const messageTimestamp = dateFormat(chat.last_message_timestamp, 'mmm d')
 
     return <div className={className} onClick={this.handleClick}>
-      {chat.interlocutor_username}
+      <div className="ChatInfo">
+        <span>{chat.interlocutor_username}</span>
+        <div className="Timestamp">{messageTimestamp}</div>
+      </div>
       <div className={lastMessageClassName}>{chat.last_message}</div>
-      {messageTimestamp}
     </div>;
   }
 });

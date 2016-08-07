@@ -73,16 +73,19 @@ export default React.createClass({
     if (e.shiftKey && e.keyCode == 13) {
     }
     else if(e.keyCode == 13) {
-      const message = {
-        type: 'SEND_MESSAGE',
-        interlocutorId: this.props.chat.interlocutor_id,
-        message: this.refs.message.value
+      this.refs.send.click();
+      if(this.refs.message.value !== '') {
+        const message = {
+          type: 'SEND_MESSAGE',
+          interlocutorId: this.props.chat.interlocutor_id,
+          message: this.refs.message.value
+        }
+
+        ws.send(JSON.stringify(message));
+
+        // TODO :) remove it and make it more correctly
+        this.refs.message.value = '';
       }
-
-      ws.send(JSON.stringify(message));
-
-      // TODO :) remove it and make it more correctly
-      this.refs.message.value = '';
     }
   },
 
@@ -102,14 +105,16 @@ export default React.createClass({
   },
 
   handleClick() {
-    const message = {
-      type: 'SEND_MESSAGE',
-      interlocutorId: this.props.chat.interlocutor_id,
-      message: this.refs.message.value
-    }
+    if(this.refs.message.value !== '') {
+      const message = {
+        type: 'SEND_MESSAGE',
+        interlocutorId: this.props.chat.interlocutor_id,
+        message: this.refs.message.value
+      }
 
-    ws.send(JSON.stringify(message));
-    this.refs.message.value = '';
+      ws.send(JSON.stringify(message));
+      this.refs.message.value = '';
+    }
   },
 
   render() {

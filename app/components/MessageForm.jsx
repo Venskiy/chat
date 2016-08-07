@@ -69,6 +69,23 @@ export default React.createClass({
     }
   },
 
+  handleKeyDown(e) {
+    if (e.shiftKey && e.keyCode == 13) {
+    }
+    else if(e.keyCode == 13) {
+      const message = {
+        type: 'SEND_MESSAGE',
+        interlocutorId: this.props.chat.interlocutor_id,
+        message: this.refs.message.value
+      }
+
+      ws.send(JSON.stringify(message));
+
+      // TODO :) remove it and make it more correctly
+      this.refs.message.value = '';
+    }
+  },
+
   handleKeyPress() {
     const {chat} = this.props;
 
@@ -100,7 +117,7 @@ export default React.createClass({
       <div className="NewsLine">
         {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
       </div>
-      <textarea ref="message" type="text" placeholder="Type your text here" onKeyPress={this.handleKeyPress} />
+      <textarea ref="message" type="text" placeholder="Type your text here" onKeyDown={this.handleKeyDown} onKeyPress={this.handleKeyPress} onKeyUp={this.handleKeyUp} />
       <button onClick={this.handleClick}>Send</button>
     </div>
   }

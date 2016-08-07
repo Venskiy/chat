@@ -6,9 +6,7 @@ from django.conf import settings
 import json
 
 from chat.models import Message, Chat
-from chat.utils import json_response
-
-# Create your views here.
+from chat.utils import json_response, date_handler
 
 
 def home(request):

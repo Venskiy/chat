@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addNewChatMessage, readChatMessage, changeIsTypingState} from 'actions';
+import {addNewChatMessage, readChatMessage, changeIsTypingState, addNewChat} from 'actions';
 
 import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
@@ -10,12 +10,13 @@ const App = React.createClass({
 
   componentWillUpdate(nextProps) {
     if(nextProps.currentUser !== this.props.currentUser) {
-      const {onNewChatMessage, onMessageRead, onInterlocutorTyping} = this.props;
+      const {onNewChatMessage, onMessageRead, onInterlocutorTyping, onNewChat} = this.props;
 
       const ws = new WebSocket(`ws://127.0.0.1:8888/chat_app/${nextProps.currentUser.user_id}/`);
 
       ws.onmessage = function(e) {
         const data = JSON.parse(e.data);
+
         if(data.type === 'SEND_MESSAGE') {
           onNewChatMessage(data.chat_id, data.message);
         }
@@ -24,6 +25,9 @@ const App = React.createClass({
         }
         else if(data.type === 'IS_USER_TYPING') {
           onInterlocutorTyping(data.chat_id);
+        }
+        else if(data.type === 'DISPLAY_CHAT_ON_RECIPIENT_SIDE') {
+          onNewChat(data.chat);
         }
       };
     }
@@ -60,6 +64,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onInterlocutorTyping(chatId) {
     dispatch(changeIsTypingState(chatId));
+  },
+
+  onNewChat(chat) {
+    dispatch(addNewChat(chat));
   }
 });
 

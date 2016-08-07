@@ -54,15 +54,15 @@ export default function(state = initialState, action) {
         chats[action.chatId].is_interlocutor_typing = true;
       }
       return Object.assign({}, state, { chats });
-    case 'CREATE_CHAT':
+    case 'ADD_NEW_CHAT':
       chats = Object.assign({}, state.chats);
       messages = Object.assign({}, state.messages);
-      chats[action.chatInfo.chat.chat_id] = action.chatInfo.chat;
-      chatMessages = [{'text': action.chatInfo.chat.last_message,
+      chats[action.chat.chat_id] = action.chat;
+      chatMessages = [{'text': action.chat.last_message,
                        'sender__username': state.currentUser.username,
-                       'timestamp': action.chatInfo.chat.last_message_timestamp,
+                       'timestamp': action.chat.last_message_timestamp,
                        'is_read': false}];
-      messages[action.chatInfo.chat.chat_id] = chatMessages;
+      messages[action.chat.chat_id] = chatMessages;
       return Object.assign({}, state, { chats }, { messages });
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);

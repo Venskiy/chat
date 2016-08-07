@@ -1,5 +1,6 @@
 import {createChat as _createChat, loadChatMessages as _loadChatMessages,
   getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
+import {waitForSocketConnection} from 'utils/utils';
 
 export const selectChat = (chatId) => ({
   type: 'SELECT_CHAT',
@@ -22,6 +23,11 @@ export const changeIsTypingState = (chatId) => ({
   chatId
 });
 
+export const addNewChat = (chat) => ({
+  type: 'ADD_NEW_CHAT',
+  chat
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatInfo => {
@@ -29,13 +35,19 @@ export const createChat = (username) => {
         const chatId = chatInfo.chat_id;
 
         dispatch(loadChatMessages(chatId));
-        dispatch({ type: 'SELECT_CHAT', chatId })
+        dispatch(selectedChat(chatId));
       }
       else if(chatInfo.type === 'CHAT_NEW') {
         const chatId = chatInfo.chat.chat_id;
 
-        dispatch({ type: 'CREATE_CHAT', chatInfo });
-        dispatch({ type: 'SELECT_CHAT', chatId })
+        const ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
+        waitForSocketConnection(ws, function() {
+          ws.send(JSON.stringify({type: 'DISPLAY_CHAT_ON_RECIPIENT_SIDE', chat: chatInfo.chat}));
+          ws.close();
+        });
+
+        dispatch(addNewChat(chatInfo.chat));
+        dispatch(selectChat(chatId));
       }
     });
   };

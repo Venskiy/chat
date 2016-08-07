@@ -156,6 +156,13 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             }
 
             c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
+        elif msg['type'] == 'DISPLAY_CHAT_ON_RECIPIENT_SIDE':
+            recipient_id = msg['chat']['interlocutor_id']
+
+            msg['chat']['interlocutor_id'] = self.user_id
+            msg['chat']['interlocutor_username'] = self.username
+
+            c.publish('user_{}'.format(recipient_id), json.dumps(msg, default=date_handler))
 
     def show_new_message(self, msg):
         if msg.kind == 'message':

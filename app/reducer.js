@@ -4,13 +4,15 @@ const initialState = {
   chats: {},
   selectedChat: '',
   messages: {'2': [{'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'},
-   {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'} ]}
+   {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'}, {'text': 'hello'} ]},
+  chatMessagesPageNumber: {}
 };
 
 export default function(state = initialState, action) {
   let chats;
   let messages;
-  let chatMessages
+  let chatMessages;
+  let chatMessagesPageNumber;
   switch (action.type) {
     case 'SELECT_CHAT':
       return Object.assign({}, state, {selectedChat: action.chatId});
@@ -64,9 +66,22 @@ export default function(state = initialState, action) {
                        'is_read': false}];
       messages[action.chat.chat_id] = chatMessages;
       return Object.assign({}, state, { chats }, { messages });
+    case 'INIT_CHAT_MESSAGES_PAGE_NUMBER':
+      chatMessagesPageNumber = Object.assign({}, state.chatMessagesPageNumber);
+      chatMessagesPageNumber[action.chatId] = 1;
+      return Object.assign({}, state, { chatMessagesPageNumber });
+    case 'INCREMENT_CHAT_MESSAGE_PAGE_NUMBER':
+      chatMessagesPageNumber = Object.assign({}, state.chatMessagesPageNumber);
+      chatMessagesPageNumber[action.chatId] += 1;
+      return Object.assign({}, state, { chatMessagesPageNumber });
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
-      messages[action.chatId] = action.chatMessages;
+      if(messages[action.chatId]) {
+        messages[action.chatId] = messages[action.chatId].concat(action.chatMessages);
+      }
+      else {
+        messages[action.chatId] = action.chatMessages;
+      }
       return Object.assign({}, state, { messages });
     case 'RECEIVE_CURRENT_USER':
       return Object.assign({}, state, { currentUser: action.user })

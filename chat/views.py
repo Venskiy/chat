@@ -7,6 +7,7 @@ import json
 
 from chat.models import Message, Chat
 from chat.utils import json_response, date_handler
+from chat import constants
 
 
 def home(request):
@@ -118,13 +119,17 @@ def load_chat_messages_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
 
+    page_number = request.GET.get('page')
     chat_id = request.GET.get('chat_id')
 
     chat = Chat.objects.get(id=chat_id)
     chat_messages = list(chat.messages.all().values('text', 'sender__username', 'timestamp', 'is_read'))
 
+    start = (int(page_number) - 1) * constants.MESSAGES_PAGE_SIZE
+    end = int(page_number) * constants.MESSAGES_PAGE_SIZE
+
     context = {
-        'chat_messages': chat_messages
+        'chat_messages': chat_messages[start:end]
     }
 
     return json_response(context)

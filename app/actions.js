@@ -28,6 +28,16 @@ export const addNewChat = (chat) => ({
   chat
 });
 
+export const initChatMessagesPageNumber = (chatId) => ({
+  type: 'INIT_CHAT_MESSAGES_PAGE_NUMBER',
+  chatId
+});
+
+export const incrementChatMessagesPageNumber =  (chatId) => ({
+  type: 'INCREMENT_CHAT_MESSAGE_PAGE_NUMBER',
+  chatId
+});
+
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatInfo => {
@@ -54,9 +64,24 @@ export const createChat = (username) => {
 };
 
 export const loadChatMessages = (chatId) => {
-  return dispatch => {
-    _loadChatMessages(chatId).then(chatMessages => {
+  return (dispatch, getState) => {
+    let currentPageNumber;
+    if(getState().chatMessagesPageNumber[chatId]) {
+      currentPageNumber = getState().chatMessagesPageNumber[chatId];
+    }
+    else {
+      currentPageNumber = 0
+    }
+
+    _loadChatMessages(chatId, currentPageNumber + 1).then(chatMessages => {
       dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatId, chatMessages });
+
+      if(currentPageNumber) {
+        dispatch(incrementChatMessagesPageNumber(chatId));
+      }
+      else {
+        dispatch(initChatMessagesPageNumber(chatId));
+      }
     });
   };
 };

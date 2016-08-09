@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 import json
+import time
 
 from chat.models import Message, Chat
 from chat.utils import json_response, date_handler
@@ -128,9 +129,14 @@ def load_chat_messages_api(request):
     start = (int(page_number) - 1) * constants.MESSAGES_PAGE_SIZE
     end = int(page_number) * constants.MESSAGES_PAGE_SIZE
 
+    chat_messages = chat_messages[start:end]
+    chat_messages.reverse()
+
     context = {
-        'chat_messages': chat_messages[start:end]
+        'chat_messages': chat_messages
     }
+
+    time.sleep(3)
 
     return json_response(context)
 

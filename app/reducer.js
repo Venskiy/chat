@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         chatMessages = Array.from(state.messages[action.chatId]);
-        chatMessages.unshift({'text': action.message.text,
+        chatMessages.push({'text': action.message.text,
                               'sender__username': action.message.sender_username,
                               'timestamp': action.message.timestamp,
                               'is_read': false});
@@ -35,7 +35,8 @@ export default function(state = initialState, action) {
     case 'READ_CHAT_MESSAGE':
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
-        for(let i = 0; i < messages[action.chatId].length; ++i) {
+        const length = messages[action.chatId].length
+        for(let i = length - 1; i === 0; --i) {
           if(messages[action.chatId][i].is_read) {
             break;
           }
@@ -68,24 +69,16 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, { chats }, { messages });
     case 'INIT_LOAD_CHAT_MESSAGES_INFO':
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
-      chatMessagesLoadInfo[action.chatId] = {pageNumber: 1, isLoading: false};
+      chatMessagesLoadInfo[action.chatId] = {pageNumber: 1};
       return Object.assign({}, state, { chatMessagesLoadInfo });
     case 'INCREMENT_CHAT_MESSAGE_PAGE_NUMBER':
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
       chatMessagesLoadInfo[action.chatId].pageNumber += 1;
       return Object.assign({}, state, { chatMessagesLoadInfo });
-    case 'START_LOAD_CHAT_MESSAGES':
-      chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
-      chatMessagesLoadInfo[action.chatId].isLoading = true;
-      return Object.assign({}, state, { chatMessagesLoadInfo });
-    case 'STOP_LOAD_CHAT_MESSAGES':
-      chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
-      chatMessagesLoadInfo[action.chatId].isLoading = false;
-      return Object.assign({}, state, { chatMessagesLoadInfo });
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
-        messages[action.chatId] = messages[action.chatId].concat(action.chatMessages);
+        messages[action.chatId] = action.chatMessages.concat(messages[action.chatId]);
       }
       else {
         messages[action.chatId] = action.chatMessages;

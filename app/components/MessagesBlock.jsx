@@ -3,32 +3,41 @@ import dateFormat from 'dateformat';
 import ReactDOM from 'react-dom';
 
 import {compareDatesWithoutTime} from 'utils/utils';
+import ChatView from './ChatView';
+
+let isLoading = false;
 
 export default React.createClass({
   propTypes: {
     chatMessages: React.PropTypes.array.isRequired,
     chatId: React.PropTypes.string.isRequired,
     loadInfo: React.PropTypes.object.isRequired,
-    onStartLoad: React.PropTypes.func.isRequired,
     onLoadMessages: React.PropTypes.func.isRequired
   },
 
-  handleScroll() {
-    const el = ReactDOM.findDOMNode(this.refs.test);
-    console.log(el.scrollTop);
-    if(el.scrollTop === 0) {
-      if(!this.props.loadInfo.isLoading) {
-        this.props.onStartLoad(this.props.chatId);
-        this.props.onLoadMessages(this.props.chatId);
+  loadMessages() {
+    const chatId = this.props.chatId;
+    const onLoadMessages = this.props.onLoadMessages;
+
+    return new Promise((resolve, reject) => {
+      if(!isLoading) {
+        isLoading = true;
+        onLoadMessages(chatId);
+        isLoading = false;
       }
-    }
+      resolve();
+    });
   },
 
   render () {
-    const {chatMessages, chatId, loadInfo} = this.props;
+    const {chatMessages, chatId, loadInfo, onLoadMessages} = this.props;
     const messagesAmount = chatMessages.length;
 
-    return <div className="MessagesBlock" ref="test" onScroll={this.handleScroll}>
+    return <ChatView className="MessagesBlock"
+                     flipped={true}
+                     scrollLoadThreshold={0}
+                     onInfiniteLoad={this.loadMessages}
+                     loadingSpinnerDelegate={<div className="Loader">pow pow </div>}>
       {chatMessages.map((message, i) => {
         const className = message.is_read ? 'Message' : 'Message-unread';
         const messageTimestamp = new Date(message.timestamp);
@@ -55,9 +64,8 @@ export default React.createClass({
           </div>
           <div className="MessageText">{message.text}</div>
           {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
-          {loadInfo.isLoading ? <div>loading</div> : <div></div>}
         </div>
       })}
-    </div>;
+    </ChatView>
   }
 });

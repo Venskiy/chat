@@ -1,17 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {startLoadChatMessages, loadChatMessages} from 'actions';
+import {loadChatMessages} from 'actions';
 
 import MessagesBlock from 'components/MessagesBlock';
 import MessageForm from 'components/MessageForm';
 
-const ChatWindow = ({chats, selectedChat, messages, chatMessagesLoadInfo, onStartLoad, onChatMessagesLoad}) => {
+const ChatWindow = ({chats, selectedChat, messages, chatMessagesLoadInfo, onChatMessagesLoad}) => {
   if(selectedChat && messages[selectedChat]) {
     return <div className="ChatWindow">
       <MessagesBlock chatMessages={messages[selectedChat]}
                      chatId={selectedChat}
-                     loadInfo={chatMessagesLoadInfo}
-                     onStartLoad={onStartLoad}
+                     loadInfo={chatMessagesLoadInfo[selectedChat]}
                      onLoadMessages={onChatMessagesLoad} />
       <MessageForm chat={chats[selectedChat]} />
     </div>
@@ -26,10 +25,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onStartLoad(chatId) {
-    dispatch(startLoadChatMessages(chatId));
-  },
-
   onChatMessagesLoad(chatId) {
     dispatch(loadChatMessages(chatId));
   }

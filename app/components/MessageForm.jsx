@@ -73,7 +73,6 @@ export default React.createClass({
     if (e.shiftKey && e.keyCode == 13) {
     }
     else if(e.keyCode == 13) {
-      this.refs.send.click();
       if(this.refs.message.value !== '') {
         const message = {
           type: 'SEND_MESSAGE',

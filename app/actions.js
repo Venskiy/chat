@@ -28,13 +28,23 @@ export const addNewChat = (chat) => ({
   chat
 });
 
-export const initChatMessagesPageNumber = (chatId) => ({
-  type: 'INIT_CHAT_MESSAGES_PAGE_NUMBER',
+export const initLoadChatMessagesInfo = (chatId) => ({
+  type: 'INIT_LOAD_CHAT_MESSAGES_INFO',
   chatId
 });
 
 export const incrementChatMessagesPageNumber =  (chatId) => ({
   type: 'INCREMENT_CHAT_MESSAGE_PAGE_NUMBER',
+  chatId
+});
+
+export const startLoadChatMessages =  (chatId) => ({
+  type: 'START_LOAD_CHAT_MESSAGES',
+  chatId
+});
+
+export const stopLoadChatMessages=  (chatId) => ({
+  type: 'STOP_LOAD_CHAT_MESSAGES',
   chatId
 });
 
@@ -66,21 +76,21 @@ export const createChat = (username) => {
 export const loadChatMessages = (chatId) => {
   return (dispatch, getState) => {
     let currentPageNumber;
-    if(getState().chatMessagesPageNumber[chatId]) {
-      currentPageNumber = getState().chatMessagesPageNumber[chatId];
+    if(getState().chatMessagesLoadInfo[chatId]) {
+      currentPageNumber = getState().chatMessagesLoadInfo[chatId].pageNumber;
     }
     else {
       currentPageNumber = 0
+      dispatch(initLoadChatMessagesInfo(chatId));
     }
 
     _loadChatMessages(chatId, currentPageNumber + 1).then(chatMessages => {
       dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatId, chatMessages });
 
+      dispatch(stopLoadChatMessages(chatId));
+
       if(currentPageNumber) {
         dispatch(incrementChatMessagesPageNumber(chatId));
-      }
-      else {
-        dispatch(initChatMessagesPageNumber(chatId));
       }
     });
   };

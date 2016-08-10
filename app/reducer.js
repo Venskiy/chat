@@ -20,11 +20,13 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         chatMessages = Array.from(state.messages[action.chatId]);
+        if(chatMessages.length === 50) {
+          chatMessages.pop();
+        }
         chatMessages.unshift({'text': action.message.text,
                               'sender__username': action.message.sender_username,
                               'timestamp': action.message.timestamp,
                               'is_read': false});
-        chatMessages.pop();
         messages[action.chatId] = chatMessages;
       }
       chats = Object.assign({}, state.chats);

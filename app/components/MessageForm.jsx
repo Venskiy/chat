@@ -113,7 +113,7 @@ export default React.createClass({
         {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
       </div>
       <textarea ref="message" type="text" placeholder="Type your text here" onKeyDown={this.handleKeyDown} onKeyPress={this.handleKeyPress} onKeyUp={this.handleKeyUp} />
-      <button ref="SendButton" onClick={this.handleClick}>Send</button>
+      <button ref="SendButton" onClick={this.handleClick} />
     </div>
   }
 });

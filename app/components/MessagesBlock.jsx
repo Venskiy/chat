@@ -48,17 +48,19 @@ export default React.createClass({
           beforeMessageTimestamp = new Date(chatMessages[i - 1].timestamp);
         }
 
-        return <div className={className} key={`message${i}`}>
+        return <div>
           {isFirstMessage ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
-          <div className="MessageInfo">
-            <div className="MessageSender">
-              {message.sender__username}
+          <div className={className} key={`message${i}`}>
+            <div className="MessageInfo">
+              <div className="MessageSender">
+                {message.sender__username}
+              </div>
+              <div className="MessageTimestamp">
+                {dateFormat(messageTimestamp, 'h:MM:ss TT')}
+              </div>
             </div>
-            <div className="MessageTimestamp">
-              {dateFormat(messageTimestamp, 'h:MM:ss TT')}
-            </div>
+            <div className="MessageText">{message.text}</div>
           </div>
-          <div className="MessageText">{message.text}</div>
           {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
         </div>
       })}

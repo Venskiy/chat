@@ -199,7 +199,9 @@ body {
   font-size: 13px;
   font-weight: 300;
   color: #000;
+  word-break: break-all;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .UsersList {

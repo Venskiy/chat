@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {waitForSocketConnection} from 'utils/utils';
 
@@ -70,21 +71,9 @@ export default React.createClass({
   },
 
   handleKeyDown(e) {
-    if (e.shiftKey && e.keyCode == 13) {
-    }
-    else if(e.keyCode == 13) {
-      if(this.refs.message.value !== '') {
-        const message = {
-          type: 'SEND_MESSAGE',
-          interlocutorId: this.props.chat.interlocutor_id,
-          message: this.refs.message.value
-        }
-
-        ws.send(JSON.stringify(message));
-
-        // TODO :) remove it and make it more correctly
-        this.refs.message.value = '';
-      }
+    if(!e.shiftKey && e.keyCode == 13) {
+      e.preventDefault();
+      ReactDOM.findDOMNode(this.refs.SendButton).click();
     }
   },
 
@@ -104,11 +93,13 @@ export default React.createClass({
   },
 
   handleClick() {
-    if(this.refs.message.value !== '') {
+    let text = this.refs.message.value;
+
+    if(text.replace(/\s+/g, '') !== '') {
       const message = {
         type: 'SEND_MESSAGE',
         interlocutorId: this.props.chat.interlocutor_id,
-        message: this.refs.message.value
+        message: text
       }
 
       ws.send(JSON.stringify(message));
@@ -122,7 +113,7 @@ export default React.createClass({
         {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
       </div>
       <textarea ref="message" type="text" placeholder="Type your text here" onKeyDown={this.handleKeyDown} onKeyPress={this.handleKeyPress} onKeyUp={this.handleKeyUp} />
-      <button onClick={this.handleClick}>Send</button>
+      <button ref="SendButton" onClick={this.handleClick}>Send</button>
     </div>
   }
 });

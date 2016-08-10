@@ -47,7 +47,6 @@ export default React.createClass({
   componentDidUpdate() {
     const {chat} = this.props;
 
-    // TODO switch to other checks
     if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
       const message = {
         type: 'READ_MESSAGE',

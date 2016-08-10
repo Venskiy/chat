@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         chatMessages = Array.from(state.messages[action.chatId]);
-        if(chatMessages.length === 50) {
+        if(chatMessages.length % 50 === 0) {
           chatMessages.pop();
         }
         chatMessages.unshift({'text': action.message.text,
@@ -63,13 +63,15 @@ export default function(state = initialState, action) {
     case 'ADD_NEW_CHAT':
       chats = Object.assign({}, state.chats);
       messages = Object.assign({}, state.messages);
+      chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo)
       chats[action.chat.chat_id] = action.chat;
       chatMessages = [{'text': action.chat.last_message,
                        'sender__username': state.currentUser.username,
                        'timestamp': action.chat.last_message_timestamp,
                        'is_read': false}];
       messages[action.chat.chat_id] = chatMessages;
-      return Object.assign({}, state, { chats }, { messages });
+      chatMessagesLoadInfo[action.chat.chat_id] = {pageNumber: 1, hasMore: false};
+      return Object.assign({}, state, { chats }, { messages }, { chatMessagesLoadInfo });
     case 'INIT_LOAD_CHAT_MESSAGES_INFO':
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
       chatMessagesLoadInfo[action.chatId] = {pageNumber: 1};

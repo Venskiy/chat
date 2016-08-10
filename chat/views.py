@@ -136,8 +136,6 @@ def load_chat_messages_api(request):
         'chat_messages': chat_messages
     }
 
-    time.sleep(3)
-
     return json_response(context)
 
 

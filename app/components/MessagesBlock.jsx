@@ -20,11 +20,7 @@ export default React.createClass({
     const onLoadMessages = this.props.onLoadMessages;
 
     return new Promise((resolve, reject) => {
-      if(!isLoading) {
-        isLoading = true;
-        onLoadMessages(chatId);
-        isLoading = false;
-      }
+      onLoadMessages(chatId);
       resolve();
     });
   },
@@ -36,12 +32,12 @@ export default React.createClass({
     return <ChatView className="MessagesBlock"
                      flipped={true}
                      scrollLoadThreshold={0}
-                     onInfiniteLoad={this.loadMessages}
-                     loadingSpinnerDelegate={<div className="Loader">pow pow </div>}>
+                     onInfiniteLoad={this.loadMessages.bind(this)}
+                     loadingSpinnerDelegate={<div className="Loader" />}>
       {chatMessages.map((message, i) => {
         const className = message.is_read ? 'Message' : 'Message-unread';
         const messageTimestamp = new Date(message.timestamp);
-        const isFirstMessage = i === (messagesAmount - 1);
+        const isFirstMessage = i === 0;
         let beforeMessageTimestamp;
 
 
@@ -54,6 +50,7 @@ export default React.createClass({
 
         return <div className={className} key={`message${i}`}>
           {isFirstMessage ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
+          {compareDatesWithoutTime(messageTimestamp, beforeMessageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
           <div className="MessageInfo">
             <div className="MessageSender">
               {message.sender__username}
@@ -63,7 +60,6 @@ export default React.createClass({
             </div>
           </div>
           <div className="MessageText">{message.text}</div>
-          {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
         </div>
       })}
     </ChatView>

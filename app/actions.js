@@ -45,7 +45,7 @@ export const createChat = (username) => {
         const chatId = chatInfo.chat_id;
 
         dispatch(loadChatMessages(chatId));
-        dispatch(selectedChat(chatId));
+        dispatch(selectChat(chatId));
       }
       else if(chatInfo.type === 'CHAT_NEW') {
         const chatId = chatInfo.chat.chat_id;

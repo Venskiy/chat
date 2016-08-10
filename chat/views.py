@@ -129,8 +129,15 @@ def load_chat_messages_api(request):
     start = (int(page_number) - 1) * constants.MESSAGES_PAGE_SIZE
     end = int(page_number) * constants.MESSAGES_PAGE_SIZE
 
+    chat_messages = chat_messages[start:end]
+
+    hasMore = True
+    if len(chat_messages) != constants.MESSAGES_PAGE_SIZE:
+        hasMore = False
+
     context = {
-        'chat_messages': chat_messages[start:end]
+        'chat_messages': chat_messages,
+        'has_more_chat_messages': hasMore
     }
 
     return json_response(context)

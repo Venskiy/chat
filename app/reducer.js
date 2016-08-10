@@ -78,6 +78,10 @@ export default function(state = initialState, action) {
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
       chatMessagesLoadInfo[action.chatId].pageNumber += 1;
       return Object.assign({}, state, { chatMessagesLoadInfo });
+    case 'SET_HAS_MORE_CHAT_MESSAGES_VALUE':
+      chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);
+      chatMessagesLoadInfo[action.chatId].hasMore = action.hasMore;
+      return Object.assign({}, state, { chatMessagesLoadInfo });
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {

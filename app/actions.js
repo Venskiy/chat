@@ -74,7 +74,11 @@ export const loadChatMessages = (chatId) => {
       dispatch(initLoadChatMessagesInfo(chatId));
     }
 
-    _loadChatMessages(chatId, currentPageNumber + 1).then(chatMessages => {
+    _loadChatMessages(chatId, currentPageNumber + 1).then(response => {
+      const chatMessages = response.chat_messages;
+      const hasMore = response.has_more_chat_messages;
+
+      dispatch({type: 'SET_HAS_MORE_CHAT_MESSAGES_VALUE', chatId, hasMore });
       dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatId, chatMessages });
 
       if(currentPageNumber) {

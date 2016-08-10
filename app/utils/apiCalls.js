@@ -57,7 +57,7 @@ export const loadChatMessages = (chatId, pageNumber) => {
       credentials: 'same-origin'
     })
     .then(response => {
-      response.json().then(response => resolve(response.chat_messages));
+      response.json().then(response => resolve(response));
     });
   });
 }

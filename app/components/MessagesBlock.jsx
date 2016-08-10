@@ -17,10 +17,13 @@ export default React.createClass({
 
   loadMessages() {
     const chatId = this.props.chatId;
+    const loadInfo = this.props.loadInfo;
     const onLoadMessages = this.props.onLoadMessages;
 
     return new Promise((resolve, reject) => {
-      onLoadMessages(chatId);
+      if(loadInfo.hasMore) {
+        onLoadMessages(chatId);
+      }
       resolve();
     });
   },

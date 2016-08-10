@@ -1,27 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import clone from 'lodash';
+'use strict';
 
-var ChatView = React.createClass({
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _lodash = require('lodash.clone');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ChatView = _react2.default.createClass({
+  displayName: 'ChatView',
+
 
   propTypes: {
-    flipped: React.PropTypes.bool,
-    scrollLoadThreshold: React.PropTypes.number,
-    onInfiniteLoad: React.PropTypes.func.isRequired,
-    loadingSpinnerDelegate: React.PropTypes.element,
-    className: React.PropTypes.string
+    flipped: _react2.default.PropTypes.bool,
+    scrollLoadThreshold: _react2.default.PropTypes.number,
+    onInfiniteLoad: _react2.default.PropTypes.func.isRequired,
+    loadingSpinnerDelegate: _react2.default.PropTypes.element,
+    className: _react2.default.PropTypes.string
   },
 
-  getDefaultProps () {
+  getDefaultProps: function getDefaultProps() {
     return {
       flipped: false,
       scrollLoadThreshold: 10,
-      loadingSpinnerDelegate: <div/>,
+      loadingSpinnerDelegate: _react2.default.createElement('div', null),
       className: ''
     };
   },
-
-  getInitialState () {
+  getInitialState: function getInitialState() {
     this.rafRequestId = null; // for cleaning up outstanding requestAnimationFrames on WillUnmount
     this.scrollTop = 0; // regular mode initial scroll
     this.scrollHeight = undefined; // it's okay, this won't be read until the second render.
@@ -32,95 +45,84 @@ var ChatView = React.createClass({
       isInfiniteLoading: false
     };
   },
-
-  componentWillUpdate (nextProps, nextState) {},
-
-  render () {
-    var displayables = clone(this.props.children);
-
+  componentWillUpdate: function componentWillUpdate(nextProps, nextState) {},
+  render: function render() {
+    var displayables = (0, _lodash2.default)(this.props.children);
     if (this.props.flipped) {
       displayables.reverse();
     }
 
-    var loadSpinner = <div ref="loadingSpinner">
-      {this.state.isInfiniteLoading ? this.props.loadingSpinnerDelegate : null}
-    </div>;
+    var loadSpinner = _react2.default.createElement(
+      'div',
+      { ref: 'loadingSpinner' },
+      this.state.isInfiniteLoading ? this.props.loadingSpinnerDelegate : null
+    );
 
     // Must not hook onScroll event directly - that will break hardware accelerated scrolling.
     // We poll it with requestAnimationFrame instead.
-    return (
-      <div className={this.props.className} ref="scrollable"
-           style={{overflowX: 'hidden', overflowY: 'scroll'}}>
-        <div ref="smoothScrollingWrapper">
-          {this.props.flipped ? loadSpinner : null}
-          {displayables}
-          {this.props.flipped ? null : loadSpinner}
-        </div>
-      </div>
+    return _react2.default.createElement(
+      'div',
+      { className: this.props.className, ref: 'scrollable',
+        style: { overflowX: 'hidden', overflowY: 'scroll' } },
+      _react2.default.createElement(
+        'div',
+        { ref: 'smoothScrollingWrapper' },
+        this.props.flipped ? loadSpinner : null,
+        displayables,
+        this.props.flipped ? null : loadSpinner
+      )
     );
   },
 
+
   // detect when dom has changed underneath us- either scrollTop or scrollHeight (layout reflow)
   // may have changed.
-  pollScroll () {
-    var domNode = ReactDOM.findDOMNode(this);
+  pollScroll: function pollScroll() {
+    var _this = this;
+
+    var domNode = _reactDom2.default.findDOMNode(this);
     if (domNode.scrollTop !== this.scrollTop) {
       if (this.shouldTriggerLoad(domNode)) {
         this.setState({ isInfiniteLoading: true });
         var p = this.props.onInfiniteLoad();
-        p.then(() => this.setState({ isInfiniteLoading: false }));
+        p.then(function () {
+          return _this.setState({ isInfiniteLoading: false });
+        });
       }
       // the dom is ahead of the state
       this.updateScrollTop();
     }
     this.rafRequestId = window.requestAnimationFrame(this.pollScroll);
   },
-
-  isPassedThreshold (flipped, scrollLoadThreshold, scrollTop, scrollHeight, clientHeight) {
-    return flipped
-        ? scrollTop <= scrollLoadThreshold
-        : scrollTop >= (scrollHeight - clientHeight - scrollLoadThreshold);
+  isPassedThreshold: function isPassedThreshold(flipped, scrollLoadThreshold, scrollTop, scrollHeight, clientHeight) {
+    return flipped ? scrollTop <= scrollLoadThreshold : scrollTop >= scrollHeight - clientHeight - scrollLoadThreshold;
   },
-
-  shouldTriggerLoad (domNode) {
-    var passedThreshold = this.isPassedThreshold(
-        this.props.flipped,
-        this.props.scrollLoadThreshold,
-        domNode.scrollTop,
-        domNode.scrollHeight,
-        domNode.clientHeight);
+  shouldTriggerLoad: function shouldTriggerLoad(domNode) {
+    var passedThreshold = this.isPassedThreshold(this.props.flipped, this.props.scrollLoadThreshold, domNode.scrollTop, domNode.scrollHeight, domNode.clientHeight);
     return passedThreshold && !this.state.isInfiniteLoading;
   },
-
-  componentDidMount () {
-    var scrollableDomEl = ReactDOM.findDOMNode(this);
+  componentDidMount: function componentDidMount() {
+    var scrollableDomEl = _reactDom2.default.findDOMNode(this);
 
     // If there are not yet any children (they are still loading),
     // this is a no-op as we are at both the top and bottom of empty viewport
-    var heightDifference = this.props.flipped
-        ? scrollableDomEl.scrollHeight - scrollableDomEl.clientHeight
-        : 0;
+    var heightDifference = this.props.flipped ? scrollableDomEl.scrollHeight - scrollableDomEl.clientHeight : 0;
 
     scrollableDomEl.scrollTop = heightDifference;
     this.scrollTop = heightDifference;
     this.rafRequestId = window.requestAnimationFrame(this.pollScroll);
   },
-
-  componentWillUnmount () {
+  componentWillUnmount: function componentWillUnmount() {
     window.cancelAnimationFrame(this.rafRequestId);
   },
-
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
     this.updateScrollTop();
   },
-
-  updateScrollTop() {
-    var scrollableDomEl = ReactDOM.findDOMNode(this);
+  updateScrollTop: function updateScrollTop() {
+    var scrollableDomEl = _reactDom2.default.findDOMNode(this);
 
     //todo this is only the happy path
-    var newScrollTop = scrollableDomEl.scrollTop + (this.props.flipped
-        ? scrollableDomEl.scrollHeight - (this.scrollHeight || 0)
-        : 0);
+    var newScrollTop = scrollableDomEl.scrollTop + (this.props.flipped ? scrollableDomEl.scrollHeight - (this.scrollHeight || 0) : 0);
 
     if (newScrollTop !== scrollableDomEl.scrollTop) {
       scrollableDomEl.scrollTop = newScrollTop;
@@ -136,6 +138,5 @@ var ChatView = React.createClass({
     // We are only handling half of the cases. Or an image resized above or below us.
   }
 });
-
 
 module.exports = ChatView;

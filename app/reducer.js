@@ -20,10 +20,11 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         chatMessages = Array.from(state.messages[action.chatId]);
-        chatMessages.push({'text': action.message.text,
+        chatMessages.unshift({'text': action.message.text,
                               'sender__username': action.message.sender_username,
                               'timestamp': action.message.timestamp,
                               'is_read': false});
+        chatMessages.pop();
         messages[action.chatId] = chatMessages;
       }
       chats = Object.assign({}, state.chats);
@@ -36,7 +37,7 @@ export default function(state = initialState, action) {
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
         const length = messages[action.chatId].length
-        for(let i = length - 1; i === 0; --i) {
+        for(let i = 0; i < length; ++i) {
           if(messages[action.chatId][i].is_read) {
             break;
           }
@@ -78,7 +79,7 @@ export default function(state = initialState, action) {
     case 'RECEIVE_CHAT_MESSAGES':
       messages = Object.assign({}, state.messages);
       if(messages[action.chatId]) {
-        messages[action.chatId] = action.chatMessages.concat(messages[action.chatId]);
+        messages[action.chatId] = messages[action.chatId].concat(action.chatMessages);
       }
       else {
         messages[action.chatId] = action.chatMessages;

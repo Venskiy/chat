@@ -129,11 +129,8 @@ def load_chat_messages_api(request):
     start = (int(page_number) - 1) * constants.MESSAGES_PAGE_SIZE
     end = int(page_number) * constants.MESSAGES_PAGE_SIZE
 
-    chat_messages = chat_messages[start:end]
-    chat_messages.reverse()
-
     context = {
-        'chat_messages': chat_messages
+        'chat_messages': chat_messages[start:end]
     }
 
     return json_response(context)

@@ -37,7 +37,7 @@ export default React.createClass({
       {chatMessages.map((message, i) => {
         const className = message.is_read ? 'Message' : 'Message-unread';
         const messageTimestamp = new Date(message.timestamp);
-        const isFirstMessage = i === 0;
+        const isFirstMessage = i === (messagesAmount - 1);
         let beforeMessageTimestamp;
 
 
@@ -50,16 +50,16 @@ export default React.createClass({
 
         return <div className={className} key={`message${i}`}>
           {isFirstMessage ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
-          {compareDatesWithoutTime(messageTimestamp, beforeMessageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
           <div className="MessageInfo">
             <div className="MessageSender">
               {message.sender__username}
             </div>
             <div className="MessageTimestamp">
-              {dateFormat(messageTimestamp, 'h:MM:ss TT')}
+              {dateFormat(messageTimestamp, 'd, h:MM:ss TT')}
             </div>
           </div>
           <div className="MessageText">{message.text}</div>
+          {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
         </div>
       })}
     </ChatView>

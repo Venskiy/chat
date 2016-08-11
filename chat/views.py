@@ -78,11 +78,13 @@ def get_user_chats_api(request):
     return json_response(context)
 
 
+@csrf_exempt
 def create_chat_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
 
-    username = request.GET.get('username')
+    data = json.loads(request.body.decode('utf-8'))
+    username = data['username']
 
     recipient = User.objects.get(username=username)
 

@@ -2,40 +2,41 @@ import {createChat as _createChat, loadChatMessages as _loadChatMessages,
   getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
 import {waitForSocketConnection} from 'utils/utils';
 import * as constants from 'utils/constants';
+import * as actionTypes from 'utils/actionTypes';
 
 export const selectChat = (chatId) => ({
-  type: 'SELECT_CHAT',
+  type: actionTypes.SELECT_CHAT,
   chatId
 });
 
 export const addNewChatMessage = (chatId, message) => ({
-  type: 'ADD_NEW_CHAT_MESSAGE',
+  type: actionTypes.ADD_NEW_CHAT_MESSAGE,
   chatId,
   message
 });
 
 export const readChatMessage = (chatId) => ({
-  type: 'READ_CHAT_MESSAGE',
+  type: actionTypes.READ_CHAT_MESSAGE,
   chatId
 });
 
 export const changeIsTypingState = (chatId) => ({
-  type: 'CHANGE_IS_TYPING_STATE',
+  type: actionTypes.CHANGE_IS_TYPING_STATE,
   chatId
 });
 
 export const addNewChat = (chat) => ({
-  type: 'ADD_NEW_CHAT',
+  type: actionTypes.ADD_NEW_CHAT,
   chat
 });
 
 export const initLoadChatMessagesInfo = (chatId) => ({
-  type: 'INIT_LOAD_CHAT_MESSAGES_INFO',
+  type: actionTypes.INIT_LOAD_CHAT_MESSAGES_INFO,
   chatId
 });
 
 export const incrementChatMessagesPageNumber =  (chatId) => ({
-  type: 'INCREMENT_CHAT_MESSAGE_PAGE_NUMBER',
+  type: actionTypes.INCREMENT_CHAT_MESSAGE_PAGE_NUMBER,
   chatId
 });
 
@@ -80,8 +81,8 @@ export const loadChatMessages = (chatId) => {
       const chatMessages = response.chat_messages;
       const hasMore = response.has_more_chat_messages;
 
-      dispatch({type: 'SET_HAS_MORE_CHAT_MESSAGES_VALUE', chatId, hasMore });
-      dispatch({ type: 'RECEIVE_CHAT_MESSAGES', chatId, chatMessages });
+      dispatch({type: actionTypes.SET_HAS_MORE_CHAT_MESSAGES_VALUE, chatId, hasMore });
+      dispatch({ type: actionTypes.RECEIVE_CHAT_MESSAGES, chatId, chatMessages });
 
       if(currentPageNumber) {
         dispatch(incrementChatMessagesPageNumber(chatId));
@@ -93,7 +94,7 @@ export const loadChatMessages = (chatId) => {
 export const initialFetchCurrentUser = () => {
   return dispatch => {
     getCurrentUser().then(user => {
-      dispatch({ type: 'RECEIVE_CURRENT_USER', user });
+      dispatch({ type: actionTypes.RECEIVE_CURRENT_USER, user });
     });
   };
 };
@@ -101,7 +102,7 @@ export const initialFetchCurrentUser = () => {
 export const initialFetchUsers = () => {
   return dispatch => {
     getAllUsers().then(users => {
-      dispatch({ type: 'RECEIVE_USERS', users });
+      dispatch({ type: actionTypes.RECEIVE_USERS, users });
     });
   };
 };
@@ -109,7 +110,7 @@ export const initialFetchUsers = () => {
 export const initialFetchChats = () => {
   return dispatch => {
     getUserChats().then(chats => {
-      dispatch({ type: 'RECEIVE_CHATS', chats});
+      dispatch({ type: actionTypes.RECEIVE_CHATS, chats});
     });
   };
 };

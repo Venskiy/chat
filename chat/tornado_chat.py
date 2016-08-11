@@ -4,6 +4,7 @@ from datetime import datetime
 from urllib.parse import urlencode
 from importlib import import_module
 from chat.utils import date_handler
+from chat import constants
 
 import tornado.httpserver
 import tornado.web
@@ -105,7 +106,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         msg = json.loads(msg)
         http_client = tornado.httpclient.AsyncHTTPClient()
 
-        if msg['type'] == 'SEND_MESSAGE':
+        if msg['type'] == constants.SEND_MESSAGE:
             message = {
                 'type': msg['type'],
                 'chat_id': self.chat_id,
@@ -131,7 +132,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 })
             )
             http_client.fetch(request, self.handle_request)
-        elif msg['type'] == 'READ_MESSAGE':
+        elif msg['type'] == constants.READ_MESSAGE:
             message = {
                 'type': msg['type'],
                 'chat_id': self.chat_id
@@ -149,20 +150,20 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 })
             )
             http_client.fetch(request, self.handle_request)
-        elif msg['type'] == 'IS_USER_TYPING':
+        elif msg['type'] == constants.IS_USER_TYPING:
             message = {
                 'type': msg['type'],
                 'chat_id': self.chat_id
             }
 
             c.publish('user_{}'.format(msg['interlocutorId']), json.dumps(message))
-        elif msg['type'] == 'DISPLAY_CHAT_ON_RECIPIENT_SIDE':
+        elif msg['type'] == constants.DISPLAY_CHAT_ON_RECIPIENT_SIDE:
             recipient_id = msg['chat']['interlocutor_id']
 
             msg['chat']['interlocutor_id'] = self.user_id
             msg['chat']['interlocutor_username'] = self.username
 
-            c.publish('user_{}'.format(recipient_id), json.dumps(msg, default=date_handler))
+            c.publish('user_{}'.format(recipient_id), json.dumps(msg))
 
     def show_new_message(self, msg):
         if msg.kind == 'message':

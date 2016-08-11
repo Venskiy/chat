@@ -1,8 +1,11 @@
 export const createChat = (username) => {
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:8000/chat/create_chat/?username=${username}`, {
-      method: 'GET',
-      credentials: 'same-origin'
+    fetch(`http://127.0.0.1:8000/chat/create_chat`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        username: username
+      })
     })
     .then(response => {
       response.json().then(response => resolve(response));

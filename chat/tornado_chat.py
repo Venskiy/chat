@@ -165,7 +165,8 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
                 method='POST',
                 body=urlencode({
                     'reader_id': self.user_id,
-                    'chat_id': self.chat_id
+                    'chat_id': self.chat_id,
+                    'api_key': settings.API_KEY,
                 })
             )
             http_client.fetch(request, self.handle_request)

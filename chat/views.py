@@ -19,6 +19,9 @@ def home(request):
 
 
 def get_current_user_api(request):
+    if not request.user.is_authenticated():
+        return HttpResponse('You are not logged in')
+
     user = request.user
 
     context = {
@@ -31,7 +34,7 @@ def get_current_user_api(request):
 
 def get_all_users_api(request):
     if not request.user.is_authenticated():
-        return HttpResponse('You are not loged in')
+        return HttpResponse('You are not logged in')
 
     all_users = User.objects.all()
     users = list(all_users.exclude(username=request.user).values('username'))
@@ -82,6 +85,9 @@ def create_chat_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
 
+    if not request.method == 'POST':
+        return HttpResponse("Request must be POST type.")
+
     data = json.loads(request.body.decode('utf-8'))
     username = data['username']
 
@@ -121,6 +127,10 @@ def load_chat_messages_api(request):
     chat_id = request.GET.get('chat_id')
 
     chat = Chat.objects.get(id=chat_id)
+
+    if not chat.participants.filter(id=request.user.id).exists():
+        return HttpResponse('You are not belong to this conversation')
+
     chat_messages = list(chat.messages.all().values('text', 'sender__username', 'timestamp', 'is_read'))
 
     start = (int(page_number) - 1) * constants.MESSAGES_PAGE_SIZE
@@ -148,15 +158,19 @@ def send_message_api(request):
         return json_response({'error': 'API key is incorrect.'})
 
     sender_id = request.POST.get('sender_id')
-    sender = User.objects.get(id=sender_id)
+    chat_id = request.POST.get('chat_id')
     message_text = request.POST.get('message')
+
+    sender = User.objects.get(id=sender_id)
 
     message_instance = Message()
     message_instance.sender = sender
     message_instance.text = message_text
     message_instance.save()
 
-    chat_id = request.POST.get('chat_id')
+    if Chat.objects.filter(participants=sender).first().id != chat_id:
+        return HttpResponse('There is no such chat')
+
     chat = Chat.objects.get(id=chat_id)
     chat.messages.add(message_instance)
 
@@ -165,8 +179,16 @@ def send_message_api(request):
 
 @csrf_exempt
 def read_chat_message_api(request):
+    api_key = request.POST.get('api_key')
+
+    if api_key != settings.API_KEY:
+        return json_response({'error': 'API key is incorrect.'})
+
     reader_id = request.POST.get('reader_id')
     chat_id = request.POST.get('chat_id')
+
+    if Chat.objects.filter(participants__id=reader_id).first().id != chat_id:
+        return HttpResponse('There is no such chat')
 
     reader = User.objects.get(id=reader_id)
     chat = Chat.objects.get(id=chat_id)

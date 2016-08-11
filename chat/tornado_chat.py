@@ -16,6 +16,8 @@ import tornadoredis
 from django.conf import settings
 from django.contrib.auth.models import User
 
+from chat.models import Chat
+
 session_engine = import_module(settings.SESSION_ENGINE)
 
 c = tornadoredis.Client()
@@ -41,9 +43,19 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
 
     @tornado.gen.engine
     def open(self, user_id):
-        # TODO some checks
-
         self.user_id = user_id
+
+        session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
+        session = session_engine.SessionStore(session_key)
+
+        try:
+            if user_id != session['_auth_user_id']:
+                self.close()
+                return
+            self.username = User.objects.get(id=self.user_id).username
+        except (KeyError, User.DoesNotExist):
+                self.close()
+                return
 
         yield tornado.gen.Task(self.client.subscribe, 'user_{}'.format(user_id))
         self.client.listen(self.handle_action)
@@ -68,7 +80,8 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         if self.client.subscribed:
             self.client.unsubscribe('user_{}'.format(self.user_id))
-            self.client.disconnect()
+
+        self.client.disconnect()
 
 
 
@@ -80,15 +93,21 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
 
     @tornado.gen.engine
     def open(self, chat_id):
-        # TODO some checks
-
         self.chat_id = chat_id
 
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
         session = session_engine.SessionStore(session_key)
 
-        self.user_id = session['_auth_user_id']
-        self.username = User.objects.get(id=self.user_id).username
+        try:
+            self.user_id = session['_auth_user_id']
+            self.username = User.objects.get(id=self.user_id).username
+        except (KeyError, User.DoesNotExist):
+            self.close()
+            return
+
+        if not Chat.objects.filter(id=chat_id, participants__id=self.user_id).exists():
+            self.close()
+            return
 
         yield tornado.gen.Task(self.client.subscribe, 'chat_{}'.format(chat_id))
         self.client.listen(self.show_new_message)
@@ -176,6 +195,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         if self.client.subscribed:
             self.client.unsubscribe('chat_{}'.format(self.chat_id))
-            self.client.disconnect()
+
+        self.client.disconnect()
 
 app = Application()

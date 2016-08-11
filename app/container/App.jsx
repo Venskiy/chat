@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {addNewChatMessage, readChatMessage, changeIsTypingState, addNewChat} from 'actions';
 
+import * as constants from 'utils/constants';
 import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
 import UsersList from './UsersList';
@@ -17,17 +18,21 @@ const App = React.createClass({
       ws.onmessage = function(e) {
         const data = JSON.parse(e.data);
 
-        if(data.type === 'SEND_MESSAGE') {
-          onNewChatMessage(data.chat_id, data.message);
-        }
-        else if(data.type === 'READ_MESSAGE') {
-          onMessageRead(data.chat_id);
-        }
-        else if(data.type === 'IS_USER_TYPING') {
-          onInterlocutorTyping(data.chat_id);
-        }
-        else if(data.type === 'DISPLAY_CHAT_ON_RECIPIENT_SIDE') {
-          onNewChat(data.chat);
+        switch (data.type) {
+          case constants.SEND_MESSAGE:
+            onNewChatMessage(data.chat_id, data.message);
+            break;
+          case constants.READ_MESSAGE:
+            onMessageRead(data.chat_id);
+            break;
+          case constants.IS_USER_TYPING:
+            onInterlocutorTyping(data.chat_id);
+            break;
+          case constants.DISPLAY_CHAT_ON_RECIPIENT_SIDE:
+            onNewChat(data.chat);
+            break;
+          default:
+            break;
         }
       };
     }
@@ -36,10 +41,8 @@ const App = React.createClass({
   render() {
     return (
       <div className="Container">
-        <ChatsList selectedChat={this.props.selectedChat} />
-        <ChatWindow chats={this.props.chats}
-                    selectedChat={this.props.selectedChat}
-                    messages={this.props.messages} />
+        <ChatsList chats={this.props.chats} selectedChat={this.props.selectedChat} />
+        <ChatWindow chats={this.props.chats} selectedChat={this.props.selectedChat} />
         <UsersList />
       </div>
     );
@@ -50,7 +53,6 @@ const mapStateToProps = (state) => ({
   currentUser: state.currentUser,
   chats: state.chats,
   selectedChat: state.selectedChat,
-  messages: state.messages
 });
 
 const mapDispatchToProps = (dispatch) => ({

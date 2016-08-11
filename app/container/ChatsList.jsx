@@ -15,14 +15,15 @@ const ChatList = ({chats, selectedChat, onChatSelect}) => {
       }
       else return 0;
     }).map(key => {
-      return <Chat chat={chats[key]} selectedChat={selectedChat} onSelect={onChatSelect} key={key} />
+      return <Chat chat={chats[key]}
+                   selectedChat={selectedChat}
+                   onSelect={onChatSelect}
+                   key={key} />
     })}
   </div>;
 }
 
-const mapStateToProps = (state) => ({
-  chats: state.chats
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
   onChatSelect(chatId) {

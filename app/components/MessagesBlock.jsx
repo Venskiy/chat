@@ -5,8 +5,6 @@ import ReactDOM from 'react-dom';
 import {compareDatesWithoutTime} from 'utils/utils';
 import ChatView from './ChatView';
 
-let isLoading = false;
-
 export default React.createClass({
   propTypes: {
     chatMessages: React.PropTypes.array.isRequired,
@@ -43,7 +41,6 @@ export default React.createClass({
         const isFirstMessage = i === (messagesAmount - 1);
         let beforeMessageTimestamp;
 
-
         if(i === 0) {
           beforeMessageTimestamp = new Date(chatMessages[i].timestamp);
         }
@@ -52,7 +49,9 @@ export default React.createClass({
         }
 
         return <div>
-          {isFirstMessage ? <div className="MessagesBlockDate">{dateFormat(messageTimestamp, 'mmmm d, yyyy')}</div> : ''}
+          {isFirstMessage ? <div className="MessagesBlockDate">
+                              {dateFormat(messageTimestamp, 'mmmm d, yyyy')}
+                            </div> : ''}
           <div className={className} key={`message${i}`}>
             <div className="MessageInfo">
               <div className="MessageSender">
@@ -64,7 +63,10 @@ export default React.createClass({
             </div>
             <div className="MessageText">{message.text}</div>
           </div>
-          {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ? <div className="MessagesBlockDate">{dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}</div> : ''}
+          {compareDatesWithoutTime(beforeMessageTimestamp, messageTimestamp) ?
+             <div className="MessagesBlockDate">
+               {dateFormat(beforeMessageTimestamp, 'mmmm d, yyyy')}
+             </div> : ''}
         </div>
       })}
     </ChatView>

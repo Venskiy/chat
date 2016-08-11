@@ -7,7 +7,9 @@ import User from 'components/User'
 const UserList = ({users, onChatCreate}) => {
   return <div className="UsersList">
     {users.map(user => {
-      return <User username={user.username} onChatCreate={onChatCreate} key={user.username} />;
+      return <User username={user.username}
+                   onChatCreate={onChatCreate}
+                   key={user.username} />;
     })}
   </div>;
 }

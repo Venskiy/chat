@@ -21,6 +21,7 @@ const ChatWindow = ({chats, selectedChat, messages, chatMessagesLoadInfo, onChat
 }
 
 const mapStateToProps = (state) => ({
+  messages: state.messages,
   chatMessagesLoadInfo: state.chatMessagesLoadInfo
 });
 

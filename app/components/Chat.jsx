@@ -1,5 +1,6 @@
 import React from 'react';
-import dateFormat from 'dateformat';
+
+import {getMessageTimestamp} from 'utils/utils';
 
 export default React.createClass({
   propTypes: {
@@ -16,21 +17,7 @@ export default React.createClass({
     const {chat, selectedChat} = this.props;
     const className = (chat.chat_id === selectedChat) ? 'Chat-selected' : 'Chat';
     const lastMessageClassName = chat.last_message_is_read ? 'LastMessage' : 'LastMessage-unread';
-    const lastMessageTimestamp = new Date(chat.last_message_timestamp);
-    const currentDate = new Date();
-    let messageTimestamp;
-
-    if(currentDate.getYear() !== lastMessageTimestamp.getYear()) {
-      messageTimestamp = dateFormat(lastMessageTimestamp, 'mmm d yyyy');
-    }
-    else if(currentDate.getDate() === lastMessageTimestamp.getDate()) {
-      messageTimestamp = dateFormat(lastMessageTimestamp, 'h:MM TT');
-    }
-    else if((currentDate.getDate() - 1) === lastMessageTimestamp.getDate())
-      messageTimestamp = 'yesterday';
-    else {
-      messageTimestamp = dateFormat(lastMessageTimestamp, 'mmm d');
-    }
+    const messageTimestamp = getMessageTimestamp(new Date(chat.last_message_timestamp));
 
     return <div className={className} onClick={this.handleClick}>
       <div className="ChatInfo">
@@ -38,7 +25,9 @@ export default React.createClass({
         <div className="LastMessageTimestamp">{messageTimestamp}</div>
       </div>
       <div className={lastMessageClassName}>
-        {chat.is_interlocutor_typing ? <div className="LoadingDots">{chat.interlocutor_username} is typing</div> : chat.last_message}
+        {chat.is_interlocutor_typing ? <div className="LoadingDots">
+                                         {chat.interlocutor_username} is typing
+                                       </div> : chat.last_message}
       </div>
     </div>;
   }

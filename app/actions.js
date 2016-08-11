@@ -1,6 +1,7 @@
 import {createChat as _createChat, loadChatMessages as _loadChatMessages,
   getCurrentUser, getAllUsers, getUserChats} from 'utils/apiCalls';
 import {waitForSocketConnection} from 'utils/utils';
+import * as constants from 'utils/constants';
 
 export const selectChat = (chatId) => ({
   type: 'SELECT_CHAT',
@@ -41,18 +42,19 @@ export const incrementChatMessagesPageNumber =  (chatId) => ({
 export const createChat = (username) => {
   return dispatch => {
     _createChat(username).then(chatInfo => {
-      if(chatInfo.type === 'CHAT_ALREADY_EXISTS') {
+      if(chatInfo.type === constants.CHAT_ALREADY_EXISTS) {
         const chatId = chatInfo.chat_id;
 
         dispatch(loadChatMessages(chatId));
         dispatch(selectChat(chatId));
       }
-      else if(chatInfo.type === 'CHAT_NEW') {
+      else if(chatInfo.type === constants.CHAT_NEW) {
         const chatId = chatInfo.chat.chat_id;
 
         const ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
         waitForSocketConnection(ws, function() {
-          ws.send(JSON.stringify({type: 'DISPLAY_CHAT_ON_RECIPIENT_SIDE', chat: chatInfo.chat}));
+          ws.send(JSON.stringify({type: constants.DISPLAY_CHAT_ON_RECIPIENT_SIDE,
+                                  chat: chatInfo.chat}));
           ws.close();
         });
 

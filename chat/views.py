@@ -18,7 +18,6 @@ def home(request):
     return render(request, 'index.html', {})
 
 
-@csrf_exempt
 def get_current_user_api(request):
     user = request.user
 
@@ -30,7 +29,6 @@ def get_current_user_api(request):
     return json_response(context)
 
 
-@csrf_exempt
 def get_all_users_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -45,7 +43,6 @@ def get_all_users_api(request):
     return json_response(context)
 
 
-@csrf_exempt
 def get_user_chats_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -81,7 +78,6 @@ def get_user_chats_api(request):
     return json_response(context)
 
 
-@csrf_exempt
 def create_chat_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -93,11 +89,12 @@ def create_chat_api(request):
     chat = Chat.objects.filter(participants=recipient).filter(participants=request.user)
     if chat.exists():
         chat = chat.first()
-        return json_response({'type': 'CHAT_ALREADY_EXISTS', 'chat_id': chat.id})
+        return json_response({'type': constants.CHAT_ALREADY_EXISTS, 'chat_id': chat.id})
 
     chat = Chat.objects.create()
     chat.participants.add(request.user, recipient)
-    initial_message = Message(text='{} started the conversation!'.format(request.user.username), sender=request.user)
+    initial_message = Message(text='{} started the conversation!'.format(request.user.username),
+                              sender=request.user)
     initial_message.save()
     chat.messages.add(initial_message)
 
@@ -112,10 +109,9 @@ def create_chat_api(request):
         'is_interlocutor_typing': False
     }
 
-    return json_response({'type': 'CHAT_NEW', 'chat': chat_info})
+    return json_response({'type': constants.CHAT_NEW, 'chat': chat_info})
 
 
-@csrf_exempt
 def load_chat_messages_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')
@@ -148,7 +144,7 @@ def send_message_api(request):
     api_key = request.POST.get('api_key')
 
     if api_key != settings.API_KEY:
-        return json_response({'error': 'Please pass a correct API key.'})
+        return json_response({'error': 'API key is incorrect.'})
 
     sender_id = request.POST.get('sender_id')
     sender = User.objects.get(id=sender_id)

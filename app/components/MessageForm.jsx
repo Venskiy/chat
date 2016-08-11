@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {waitForSocketConnection} from 'utils/utils';
+import * as constants from 'utils/constants';
 
 let ws;
 let timeout;
@@ -9,8 +10,7 @@ let isTyping = false;
 
 export default React.createClass({
   propTypes: {
-    chat: React.PropTypes.object.isRequired,
-    onMessage: React.PropTypes.func.isRequired
+    chat: React.PropTypes.object.isRequired
   },
 
   componentWillMount() {
@@ -22,10 +22,9 @@ export default React.createClass({
   componentDidMount() {
     const {chat} = this.props;
 
-    // TODO switch to other checks
     if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
       const message = {
-        type: 'READ_MESSAGE',
+        type: constants.READ_MESSAGE,
         interlocutorId: chat.interlocutor_id,
       }
 
@@ -49,7 +48,7 @@ export default React.createClass({
 
     if(!chat.last_message_is_read && chat.last_message_sender_id.toString() === chat.interlocutor_id.toString()) {
       const message = {
-        type: 'READ_MESSAGE',
+        type: constants.READ_MESSAGE,
         interlocutorId: chat.interlocutor_id,
       }
 
@@ -65,7 +64,8 @@ export default React.createClass({
     if(isTyping) {
       clearTimeout(timeout);
       isTyping = false;
-      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
+      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                              interlocutorId: chat.interlocutor_id}));
     }
   },
 
@@ -83,11 +83,13 @@ export default React.createClass({
     const value = this.refs.message.value;
     if(!isTyping) {
       isTyping = true;
-      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
+      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                              interlocutorId: chat.interlocutor_id}));
     }
     timeout =  setTimeout(function() {
       isTyping = false;
-      ws.send(JSON.stringify({type: 'IS_USER_TYPING', interlocutorId: chat.interlocutor_id}));
+      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                              interlocutorId: chat.interlocutor_id}));
     }, 3000)
   },
 
@@ -96,7 +98,7 @@ export default React.createClass({
 
     if(text.replace(/\s+/g, '') !== '') {
       const message = {
-        type: 'SEND_MESSAGE',
+        type: constants.SEND_MESSAGE,
         interlocutorId: this.props.chat.interlocutor_id,
         message: text
       }
@@ -109,9 +111,16 @@ export default React.createClass({
   render() {
     return <div className="MessageForm">
       <div className="NewsLine">
-        {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">{this.props.chat.interlocutor_username} is typing</div> : <div></div>}
+        {this.props.chat.is_interlocutor_typing ? <div className="LoadingDots">
+                                                    {this.props.chat.interlocutor_username} is typing
+                                                  </div> : <div></div>}
       </div>
-      <textarea ref="message" type="text" placeholder="Type your text here" onKeyDown={this.handleKeyDown} onKeyPress={this.handleKeyPress} onKeyUp={this.handleKeyUp} />
+      <textarea ref="message"
+                type="text"
+                placeholder="Type your text here"
+                onKeyDown={this.handleKeyDown}
+                onKeyPress={this.handleKeyPress}
+                onKeyUp={this.handleKeyUp} />
       <button ref="SendButton" onClick={this.handleClick} />
     </div>
   }

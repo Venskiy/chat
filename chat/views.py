@@ -78,7 +78,6 @@ def get_user_chats_api(request):
     return json_response(context)
 
 
-@csrf_exempt
 def create_chat_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')

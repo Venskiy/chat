@@ -1,8 +1,14 @@
+import {getCookie} from 'utils/utils';
+
 export const createChat = (username) => {
   return new Promise((resolve, reject) => {
+    let headers = new Headers()
+    headers.append("X-CSRFToken", getCookie("csrftoken"));
+
     fetch(`http://127.0.0.1:8000/chat/create_chat`, {
       method: 'POST',
       credentials: 'same-origin',
+      headers: headers,
       body: JSON.stringify({
         username: username
       })

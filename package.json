@@ -25,7 +25,6 @@
     "lodash.clone": "^4.4.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
-    "react-infinite-scroll": "^0.1.5",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",

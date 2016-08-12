@@ -1,3 +1,6 @@
+import 'style/app.scss';
+import 'style/custom-scrollbar.scss';
+
 require('es6-promise').polyfill();
 require('whatwg-fetch');
 

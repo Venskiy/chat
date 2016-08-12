@@ -6,6 +6,7 @@ import * as constants from 'utils/constants';
 import ChatsList from './ChatsList';
 import ChatWindow from './ChatWindow';
 import UsersList from './UsersList';
+import Footer from 'components/Footer';
 
 const App = React.createClass({
 
@@ -40,10 +41,13 @@ const App = React.createClass({
 
   render() {
     return (
-      <div className="Container">
-        <ChatsList chats={this.props.chats} selectedChat={this.props.selectedChat} />
-        <ChatWindow chats={this.props.chats} selectedChat={this.props.selectedChat} />
-        <UsersList />
+      <div>
+        <div className="Container">
+          <ChatsList chats={this.props.chats} selectedChat={this.props.selectedChat} />
+          <ChatWindow chats={this.props.chats} selectedChat={this.props.selectedChat} />
+          <UsersList />
+        </div>
+        <Footer />
       </div>
     );
   }

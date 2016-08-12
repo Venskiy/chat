@@ -16,7 +16,7 @@ const ChatWindow = ({chats, selectedChat, messages, chatMessagesLoadInfo, onChat
     </div>
   }
   else {
-    return <div className="ChatWindow-empty">Please select a chat or create a new one!</div>
+    return <div className="ChatWindow-empty">Please, select a chat or create a new one!</div>
   }
 }
 

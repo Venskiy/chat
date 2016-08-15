@@ -37,7 +37,7 @@ def get_all_users_api(request):
         return HttpResponse('You are not logged in')
 
     all_users = User.objects.all()
-    users = list(all_users.exclude(username=request.user).values('username'))
+    users = list(all_users.exclude(username=request.user).order_by('date_joined').values('username'))
 
     context = {
         'users': users
@@ -86,7 +86,7 @@ def create_chat_api(request):
         return HttpResponse('You are not loged in')
 
     if not request.method == 'POST':
-        return HttpResponse("Request must be POST type.")
+        return HttpResponse('Request must be POST type.')
 
     data = json.loads(request.body.decode('utf-8'))
     username = data['username']
@@ -168,10 +168,11 @@ def send_message_api(request):
     message_instance.text = message_text
     message_instance.save()
 
-    if Chat.objects.filter(participants=sender).first().id != chat_id:
-        return HttpResponse('There is no such chat')
-
     chat = Chat.objects.get(id=chat_id)
+
+    if not chat.participants.filter(id=sender_id).exists():
+        return HttpResponse('You are not belong to this conversation')
+
     chat.messages.add(message_instance)
 
     return json_response({'status': 'ok'})
@@ -187,11 +188,11 @@ def read_chat_message_api(request):
     reader_id = request.POST.get('reader_id')
     chat_id = request.POST.get('chat_id')
 
-    if Chat.objects.filter(participants__id=reader_id).first().id != chat_id:
-        return HttpResponse('There is no such chat')
-
     reader = User.objects.get(id=reader_id)
     chat = Chat.objects.get(id=chat_id)
+
+    if not chat.participants.filter(id=reader_id).exists():
+        return HttpResponse('You are not belong to this conversation')
 
     unread_messages = chat.messages.filter(is_read=False).exclude(sender=reader)
 

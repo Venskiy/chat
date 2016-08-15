@@ -16,7 +16,7 @@ const ChatList = ({chats, selectedChat, onChatSelect}) => {
       else return 0;
     }).map(key => {
       return <Chat chat={chats[key]}
-                   selectedChat={selectedChat}
+                   selectedChat={selectedChat.toString()}
                    onSelect={onChatSelect}
                    key={key} />
     })}

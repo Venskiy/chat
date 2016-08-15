@@ -33,7 +33,7 @@ export default React.createClass({
     return <ChatView className="MessagesBlock"
                      flipped={true}
                      scrollLoadThreshold={0}
-                     onInfiniteLoad={this.loadMessages.bind(this)}
+                     onInfiniteLoad={this.loadMessages}
                      loadingSpinnerDelegate={<div className="Loader" />}>
       {chatMessages.map((message, i) => {
         const className = message.is_read ? 'Message' : 'Message-unread';
@@ -48,11 +48,11 @@ export default React.createClass({
           beforeMessageTimestamp = new Date(chatMessages[i - 1].timestamp);
         }
 
-        return <div>
+        return <div key={`message${i}`}>
           {isFirstMessage ? <div className="MessagesBlockDate">
                               {dateFormat(messageTimestamp, 'mmmm d, yyyy')}
                             </div> : ''}
-          <div className={className} key={`message${i}`}>
+          <div className={className}>
             <div className="MessageInfo">
               <div className="MessageSender">
                 {message.sender__username}

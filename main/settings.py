@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     # my packeages
     'chat',
+    'user_profile'
 ]
 
 MIDDLEWARE_CLASSES = [

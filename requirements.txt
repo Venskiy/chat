@@ -18,6 +18,6 @@ requests-oauthlib==0.6.2
 simplegeneric==0.8.1
 six==1.10.0
 tornado==4.4.1
-tornado-redis==2.5.0
+tornado-redis==2.4.18
 traitlets==4.2.2
 wcwidth==0.1.7

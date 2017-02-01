@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     # my apps
     'chat',
-    'user_profile'
+    'user_profile',
+    'restapi'
 ]
 
 MIDDLEWARE_CLASSES = [

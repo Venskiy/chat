@@ -22,7 +22,7 @@ export const createChat = (username) => {
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    fetch('http://127.0.0.1:8000/chat/get_current_user', {
+    fetch('/api/get_info_about_authenticated_user', {
       method: 'GET',
       credentials: 'same-origin'
     })

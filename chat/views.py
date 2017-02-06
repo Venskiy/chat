@@ -18,20 +18,6 @@ def home(request):
     return render(request, 'index.html', {})
 
 
-def get_all_users_api(request):
-    if not request.user.is_authenticated():
-        return HttpResponse('You are not logged in')
-
-    all_users = User.objects.all()
-    users = list(all_users.exclude(username=request.user).order_by('date_joined').values('username'))
-
-    context = {
-        'users': users
-    }
-
-    return json_response(context)
-
-
 def get_user_chats_api(request):
     if not request.user.is_authenticated():
         return HttpResponse('You are not loged in')

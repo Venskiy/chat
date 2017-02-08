@@ -4,8 +4,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view
 
+import json
+
 from restapi.serializers import UserSerializer, ChatSerializer
-from chat.models import Chat
+from chat.models import Chat, Message
+from chat import constants
 
 
 @api_view(['GET'])
@@ -30,8 +33,35 @@ def get_all_users(request):
 @api_view(['GET'])
 def get_user_chats(request):
     if not request.user.is_authenticated():
-        return HttpResponse('You are not loged in')
+        return Response('You are not logged in', status=status.HTTP_400_BAD_REQUEST)
 
     user_chats = Chat.objects.filter(participants=request.user)
     serializer = ChatSerializer(user_chats, context={'request': request}, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def create_chat(request):
+    if not request.user.is_authenticated():
+        return Response('You are not logged in', status=status.HTTP_400_BAD_REQUEST)
+
+    data = request.data
+    username = data['username']
+
+    recipient = User.objects.get(username=username)
+
+    chat = Chat.objects.filter(participants=recipient).filter(participants=request.user)
+    if chat.exists():
+        chat = chat.first()
+        return Response({'type': constants.CHAT_ALREADY_EXISTS, 'chat_id': chat.id})
+
+    chat = Chat.objects.create()
+    chat.participants.add(request.user, recipient)
+    initial_message = Message(text='{} started the conversation!'.format(request.user.username),
+                              sender=request.user)
+    initial_message.save()
+    chat.messages.add(initial_message)
+
+    serializer = ChatSerializer(chat, context={'request': request})
+
+    return Response({'type': constants.CHAT_NEW, 'chat': serializer.data})

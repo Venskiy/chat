@@ -70,13 +70,13 @@ export default function(state = initialState, action) {
       chats = Object.assign({}, state.chats);
       messages = Object.assign({}, state.messages);
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo)
-      chats[action.chat.chat_id] = action.chat;
+      chats[action.chat.id] = action.chat;
       chatMessages = [{'text': action.chat.last_message,
                        'sender__username': state.currentUser.username,
                        'timestamp': action.chat.last_message_timestamp,
                        'is_read': false}];
-      messages[action.chat.chat_id] = chatMessages;
-      chatMessagesLoadInfo[action.chat.chat_id] = {pageNumber: 1, hasMore: false};
+      messages[action.chat.id] = chatMessages;
+      chatMessagesLoadInfo[action.chat.id] = {pageNumber: 1, hasMore: false};
       return Object.assign({}, state, { chats }, { messages }, { chatMessagesLoadInfo });
     case actionTypes.INIT_LOAD_CHAT_MESSAGES_INFO:
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo);

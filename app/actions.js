@@ -45,12 +45,11 @@ export const createChat = (username) => {
     _createChat(username).then(chatInfo => {
       if(chatInfo.type === constants.CHAT_ALREADY_EXISTS) {
         const chatId = chatInfo.chat_id;
-
         dispatch(loadChatMessages(chatId));
         dispatch(selectChat(chatId));
       }
       else if(chatInfo.type === constants.CHAT_NEW) {
-        const chatId = chatInfo.chat.chat_id;
+        const chatId = chatInfo.chat.id;
 
         const ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chatId}/`);
         waitForSocketConnection(ws, function() {

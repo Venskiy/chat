@@ -104,7 +104,14 @@ export default function(state = initialState, action) {
     case actionTypes.RECEIVE_USERS:
       return Object.assign({}, state, { users: action.users });
     case actionTypes.RECEIVE_CHATS:
-      return Object.assign({}, state, { chats: action.chats });
+      let chats = action.chats;
+      if(Array.isArray(chats)) {
+        chats = chats.reduce((result, item) => {
+          result[item.id] = item;
+          return result;
+        }, {})
+      }
+      return Object.assign({}, state, { chats: chats });
     default:
       return state;
   }

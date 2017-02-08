@@ -16,7 +16,7 @@ export default React.createClass({
   componentWillMount() {
     const {chat} = this.props;
 
-    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.chat_id}/`);
+    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.id}/`);
   },
 
   componentDidMount() {
@@ -37,9 +37,9 @@ export default React.createClass({
   componentWillUpdate(nextProps) {
     const {chat} = nextProps;
 
-    if(chat.chat_id !== this.props.chat.chat_id) {
+    if(chat.id !== this.props.chat.id) {
       ws.close();
-      ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.chat_id}/`);
+      ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.id}/`);
     }
   },
 

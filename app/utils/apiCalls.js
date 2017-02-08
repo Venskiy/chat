@@ -2,7 +2,7 @@ import {getCookie} from 'utils/utils';
 
 export const createChat = (username) => {
   return new Promise((resolve, reject) => {
-    let headers = new Headers()
+    let headers = new Headers();
     headers.append("X-CSRFToken", getCookie("csrftoken"));
 
     fetch(`http://127.0.0.1:8000/chat/create_chat`, {
@@ -48,12 +48,12 @@ export const getAllUsers = () => {
 
 export const getUserChats = () => {
   return new Promise((resolve, reject) => {
-    fetch('http://127.0.0.1:8000/chat/get_user_chats', {
+    fetch('/api/get_user_chats', {
       method: 'GET',
       credentials: 'same-origin'
     })
     .then(response => {
-      response.json().then(response => resolve(response.chats));
+      response.json().then(response => resolve(response));
     });
   });
 };

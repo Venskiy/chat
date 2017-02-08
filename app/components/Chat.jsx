@@ -10,12 +10,12 @@ export default React.createClass({
   },
 
   handleClick() {
-    this.props.onSelect(this.props.chat.chat_id);
+    this.props.onSelect(this.props.chat.id);
   },
 
   render () {
     const {chat, selectedChat} = this.props;
-    const className = (chat.chat_id === selectedChat) ? 'Chat-selected' : 'Chat';
+    const className = (chat.id === selectedChat) ? 'Chat-selected' : 'Chat';
     const lastMessageClassName = chat.last_message_is_read ? 'LastMessage' : 'LastMessage-unread';
     const messageTimestamp = getMessageTimestamp(new Date(chat.last_message_timestamp));
 

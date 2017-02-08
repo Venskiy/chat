@@ -23,6 +23,22 @@ class Chat(models.Model):
     messages = models.ManyToManyField(Message)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def last_message_text(self):
+        return self.messages.latest('timestamp').text
+
+    @property
+    def last_message_sender_id(self):
+        return self.messages.latest('timestamp').sender.id
+
+    @property
+    def last_message_timestamp(self):
+        return self.messages.latest('timestamp').timestamp
+
+    @property
+    def last_message_is_read(self):
+        return self.messages.latest('timestamp').is_read
+
     def __str__(self):
         return str(self.id)
 

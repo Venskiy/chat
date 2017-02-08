@@ -9,7 +9,7 @@ const ChatWindow = ({chats, selectedChat, messages, chatMessagesLoadInfo, onChat
   if(selectedChat && messages[selectedChat]) {
     return <div className="ChatWindow">
       <MessagesBlock chatMessages={messages[selectedChat]}
-                     chatId={selectedChat.toString}
+                     chatId={selectedChat.toString()}
                      loadInfo={chatMessagesLoadInfo[selectedChat]}
                      onLoadMessages={onChatMessagesLoad} />
       <MessageForm chat={chats[selectedChat]} />

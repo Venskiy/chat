@@ -129,21 +129,22 @@ def send_message_api(request):
     if api_key != settings.API_KEY:
         return json_response({'error': 'API key is incorrect.'})
 
+
+
     sender_id = request.POST.get('sender_id')
     chat_id = request.POST.get('chat_id')
     message_text = request.POST.get('message')
 
+    chat = Chat.objects.get(id=chat_id)
     sender = User.objects.get(id=sender_id)
+
+    if not chat.participants.filter(id=sender_id).exists():
+        return HttpResponse('You are not belong to this conversation')
 
     message_instance = Message()
     message_instance.sender = sender
     message_instance.text = message_text
     message_instance.save()
-
-    chat = Chat.objects.get(id=chat_id)
-
-    if not chat.participants.filter(id=sender_id).exists():
-        return HttpResponse('You are not belong to this conversation')
 
     chat.messages.add(message_instance)
 

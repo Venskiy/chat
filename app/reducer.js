@@ -31,7 +31,7 @@ export default function(state = initialState, action) {
           }
         }
         chatMessages.unshift({'text': action.message.text,
-                              'sender__username': action.message.sender_username,
+                              'sender_username': action.message.sender_username,
                               'timestamp': action.message.timestamp,
                               'is_read': false});
         messages[action.chatId] = chatMessages;
@@ -72,7 +72,7 @@ export default function(state = initialState, action) {
       chatMessagesLoadInfo = Object.assign({}, state.chatMessagesLoadInfo)
       chats[action.chat.id] = action.chat;
       chatMessages = [{'text': action.chat.last_message,
-                       'sender__username': state.currentUser.username,
+                       'sender_username': state.currentUser.username,
                        'timestamp': action.chat.last_message_timestamp,
                        'is_read': false}];
       messages[action.chat.id] = chatMessages;

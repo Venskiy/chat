@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view
 
 import json
 
-from restapi.serializers import UserSerializer, ChatSerializer
+from restapi.serializers import UserSerializer, ChatSerializer, MessageSerializer
 from chat.models import Chat, Message
 from chat import constants
 
@@ -65,3 +66,33 @@ def create_chat(request):
     serializer = ChatSerializer(chat, context={'request': request})
 
     return Response({'type': constants.CHAT_NEW, 'chat': serializer.data})
+
+
+@api_view(['GET'])
+def load_chat_messages(request):
+    if not request.user.is_authenticated():
+        return Response('You are not logged in', status=status.HTTP_400_BAD_REQUEST)
+
+    page_number = int(request.GET.get('page'))
+    chat_id = request.GET.get('chat_id')
+
+    chat = Chat.objects.get(id=chat_id)
+
+    if not chat.participants.filter(id=request.user.id).exists():
+        return Response('You are not belong to this conversation', status=status.HTTP_400_BAD_REQUEST)
+
+    paginator = Paginator(chat.messages.all(), constants.MESSAGES_PAGE_SIZE)
+    messages = paginator.page(page_number)
+    serializer = MessageSerializer(messages, many=True)
+
+    hasMore = True
+    if page_number == paginator.num_pages:
+        hasMore = False
+
+    context = {
+        'chat_messages': serializer.data,
+        'has_more_chat_messages': hasMore
+    }
+
+    return Response({'chat_messages': serializer.data,
+                     'has_more_chat_messages': hasMore})

@@ -55,7 +55,7 @@ export default React.createClass({
           <div className={className}>
             <div className="MessageInfo">
               <div className="MessageSender">
-                {message.sender__username}
+                {message.sender_username}
               </div>
               <div className="MessageTimestamp">
                 {dateFormat(messageTimestamp, 'h:MM:ss TT')}

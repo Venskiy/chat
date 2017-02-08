@@ -63,7 +63,7 @@ export const getUserChats = () => {
 
 export const loadChatMessages = (chatId, pageNumber) => {
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:8000/chat/load_chat_messages/?page=${pageNumber}&chat_id=${chatId}`, {
+    fetch(`/api/load_chat_messages/?page=${pageNumber}&chat_id=${chatId}`, {
       method: 'GET',
       credentials: 'same-origin'
     })

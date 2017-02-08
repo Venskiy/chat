@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from chat.models import Chat
+from chat.models import Chat, Message
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -35,3 +35,11 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = ('id', 'last_message', 'last_message_sender_id',
                   'last_message_timestamp', 'last_message_is_read', 'interlocutor_id',
                   'interlocutor_username', 'is_interlocutor_typing')
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender_username = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Message
+        fields = ('text', 'sender_username', 'timestamp', 'is_read')

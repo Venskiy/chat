@@ -9,6 +9,10 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
+    @property
+    def sender_username(self):
+        return self.sender.username
+
     def __str__(self):
         return self.text
 

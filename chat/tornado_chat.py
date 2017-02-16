@@ -15,6 +15,7 @@ import tornadoredis
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 from chat.models import Chat
 
@@ -26,8 +27,8 @@ c.connect()
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r'/chat_app/(?P<user_id>\d+)/', ChatAppHandler),
-            (r'/tornado_chat/(?P<chat_id>\d+)/', TornadoChatHandler),
+            (r'/chat_app/(?P<user_id>\d+)/?', ChatAppHandler),
+            (r'/tornado_chat/(?P<chat_id>\d+)/?', TornadoChatHandler),
         ]
         settings = dict(
             debug=True,
@@ -40,6 +41,7 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
         super(ChatAppHandler, self).__init__(*args, **kwargs)
         self.client = tornadoredis.Client()
         self.client.connect()
+        self.user_token = self.get_argument('user_token', None, True)
 
     @tornado.gen.engine
     def open(self, user_id):
@@ -48,20 +50,31 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
         session = session_engine.SessionStore(session_key)
 
-        try:
-            if user_id != session['_auth_user_id']:
+        if self.user_token:
+            try:
+                token = Token.objects.get(key=self.user_token)
+                if user_id != token.user.id:
+                    self.close()
+                    return
+                self.username = token.user.username
+            except (Token.DoesNotExist):
                 self.close()
                 return
-            self.username = User.objects.get(id=self.user_id).username
-        except (KeyError, User.DoesNotExist):
-                self.close()
-                return
+        else:
+            try:
+                if user_id != session['_auth_user_id']:
+                    self.close()
+                    return
+                self.username = User.objects.get(id=self.user_id).username
+            except (KeyError, User.DoesNotExist):
+                    self.close()
+                    return
 
         yield tornado.gen.Task(self.client.subscribe, 'user_{}'.format(user_id))
         self.client.listen(self.handle_action)
 
     def check_origin(self, origin):
-        if origin == 'http://127.0.0.1:8000':
+        if origin == 'http://127.0.0.1:8000' or 'http://127.0.0.1:8888':
             return True
         else:
             return False
@@ -90,6 +103,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         super(TornadoChatHandler, self).__init__(*args, **kwargs)
         self.client = tornadoredis.Client()
         self.client.connect()
+        self.user_token = self.get_argument('user_token', None, True)
 
     @tornado.gen.engine
     def open(self, chat_id):
@@ -98,12 +112,21 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
         session = session_engine.SessionStore(session_key)
 
-        try:
-            self.user_id = session['_auth_user_id']
-            self.username = User.objects.get(id=self.user_id).username
-        except (KeyError, User.DoesNotExist):
-            self.close()
-            return
+        if self.user_token:
+            try:
+                token = Token.objects.get(key=self.user_token)
+                self.user_id = token.user.id
+                self.username = token.user.username
+            except (Token.DoesNotExist):
+                self.close()
+                return
+        else:
+            try:
+                self.user_id = session['_auth_user_id']
+                self.username = User.objects.get(id=self.user_id).username
+            except (KeyError, User.DoesNotExist):
+                self.close()
+                return
 
         if not Chat.objects.filter(id=chat_id, participants__id=self.user_id).exists():
             self.close()
@@ -113,7 +136,7 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
         self.client.listen(self.show_new_message)
 
     def check_origin(self, origin):
-        if origin == 'http://127.0.0.1:8000':
+        if origin == 'http://127.0.0.1:8000' or 'http://127.0.0.1:8888':
             return True
         else:
             return False

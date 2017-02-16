@@ -4,19 +4,19 @@ import ReactDOM from 'react-dom';
 import {waitForSocketConnection} from 'utils/utils';
 import * as constants from 'utils/constants';
 
-let ws;
-let timeout;
-let isTyping = false;
-
 export default React.createClass({
   propTypes: {
     chat: React.PropTypes.object.isRequired
   },
 
+  getInitialState() {
+    return { isTyping: false };
+  },
+
   componentWillMount() {
     const {chat} = this.props;
 
-    ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.id}/`);
+    this.setState({ ws: new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${chat.id}/`) });
   },
 
   componentDidMount() {
@@ -28,6 +28,7 @@ export default React.createClass({
         interlocutorId: chat.interlocutor_id,
       }
 
+      const ws = this.state.ws;
       waitForSocketConnection(ws, function() {
         ws.send(JSON.stringify(message));
       });
@@ -38,8 +39,8 @@ export default React.createClass({
     const {chat} = nextProps;
 
     if(chat.id !== this.props.chat.id) {
-      ws.close();
-      ws = new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.id}/`);
+      this.state.ws.close();
+      this.setState({ ws: new WebSocket(`ws://127.0.0.1:8888/tornado_chat/${nextProps.chat.id}/`) });
     }
   },
 
@@ -52,6 +53,7 @@ export default React.createClass({
         interlocutorId: chat.interlocutor_id,
       }
 
+      const ws = this.state.ws;
       waitForSocketConnection(ws, function() {
         ws.send(JSON.stringify(message));
       });
@@ -61,11 +63,11 @@ export default React.createClass({
   componentWillUnmount() {
     const {chat} = this.props;
 
-    if(isTyping) {
-      clearTimeout(timeout);
-      isTyping = false;
-      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
-                              interlocutorId: chat.interlocutor_id}));
+    if(this.state.isTyping) {
+      clearTimeout(this.state.timeout);
+      this.setState({ isTyping: false });
+      this.state.ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                                         interlocutorId: chat.interlocutor_id}));
     }
   },
 
@@ -79,18 +81,20 @@ export default React.createClass({
   handleKeyPress() {
     const {chat} = this.props;
 
-    clearTimeout(timeout);
+    clearTimeout(this.state.timeout);
     const value = this.refs.message.value;
-    if(!isTyping) {
-      isTyping = true;
-      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
-                              interlocutorId: chat.interlocutor_id}));
+    if(!this.state.isTyping) {
+      this.setState({ isTyping: true });
+      this.state.ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                                         interlocutorId: chat.interlocutor_id}));
     }
-    timeout =  setTimeout(function() {
-      isTyping = false;
-      ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
-                              interlocutorId: chat.interlocutor_id}));
-    }, 3000)
+    let _this = this;
+    const timeout =  setTimeout(function() {
+      _this.setState({ isTyping: false });
+      _this.state.ws.send(JSON.stringify({type: constants.IS_USER_TYPING,
+                                          interlocutorId: chat.interlocutor_id}));
+    }, 3000);
+    this.setState({ timeout: timeout });
   },
 
   handleClick() {
@@ -103,7 +107,7 @@ export default React.createClass({
         message: text
       }
 
-      ws.send(JSON.stringify(message));
+      this.state.ws.send(JSON.stringify(message));
       this.refs.message.value = '';
     }
   },

@@ -27,7 +27,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onChatMessagesLoad(chatId) {
-    dispatch(loadChatMessages(chatId));
+    dispatch(loadChatMessages(chatId, false));
   }
 });
 

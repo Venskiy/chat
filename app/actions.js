@@ -65,11 +65,15 @@ export const createChat = (username) => {
   };
 };
 
-export const loadChatMessages = (chatId) => {
+export const loadChatMessages = (chatId, isInitialLoad) => {
   return (dispatch, getState) => {
     let currentPageNumber;
     if(getState().chatMessagesLoadInfo[chatId]) {
-      currentPageNumber = getState().chatMessagesLoadInfo[chatId].pageNumber;
+      if(isInitialLoad) {
+        return;
+      } else {
+        currentPageNumber = getState().chatMessagesLoadInfo[chatId].pageNumber;
+      }
     }
     else {
       currentPageNumber = 0

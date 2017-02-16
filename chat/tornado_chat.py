@@ -46,14 +46,13 @@ class ChatAppHandler(tornado.websocket.WebSocketHandler):
     @tornado.gen.engine
     def open(self, user_id):
         self.user_id = user_id
-
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
         session = session_engine.SessionStore(session_key)
 
         if self.user_token:
             try:
                 token = Token.objects.get(key=self.user_token)
-                if user_id != token.user.id:
+                if int(user_id) != token.user.id:
                     self.close()
                     return
                 self.username = token.user.username

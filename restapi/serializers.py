@@ -27,7 +27,7 @@ class ChatSerializer(serializers.ModelSerializer):
         interlocutor = chat.participants.exclude(id=self.context['request'].user.id).first()
         return interlocutor.username
 
-    def get_is_interlocutor_typing(self, foo):
+    def get_is_interlocutor_typing(self, chat):
         return False
 
     class Meta:

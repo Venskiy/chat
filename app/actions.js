@@ -9,9 +9,10 @@ export const selectChat = (chatId) => ({
   chatId
 });
 
-export const addNewChatMessage = (chatId, message) => ({
+export const addNewChatMessage = (chatId, senderId, message) => ({
   type: actionTypes.ADD_NEW_CHAT_MESSAGE,
   chatId,
+  senderId,
   message
 });
 

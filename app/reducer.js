@@ -30,14 +30,11 @@ export default function(state = initialState, action) {
             chatMessagesLoadInfo[action.chatId].hasMore = true;
           }
         }
-        chatMessages.unshift({'text': action.message.text,
-                              'sender_username': action.message.sender_username,
-                              'timestamp': action.message.timestamp,
-                              'is_read': false});
+        chatMessages.unshift(action.message);
         messages[action.chatId] = chatMessages;
       }
       chats[action.chatId].last_message = action.message.text;
-      chats[action.chatId].last_message_sender_id = action.message.sender_id;
+      chats[action.chatId].last_message_sender_id = action.senderId;
       chats[action.chatId].last_message_timestamp = action.message.timestamp;
       chats[action.chatId].last_message_is_read = false;
       return Object.assign({}, state, { messages }, { chats }, { chatMessagesLoadInfo });

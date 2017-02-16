@@ -152,11 +152,12 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
             message = {
                 'type': msg['type'],
                 'chat_id': self.chat_id,
+                'sender_id': self.user_id,
                 'message': {
                     'text': msg['message'],
-                    'sender_id': self.user_id,
                     'sender_username': self.username,
-                    'timestamp': datetime.now()
+                    'timestamp': datetime.now(),
+                    'is_read': False
                 }
             }
 

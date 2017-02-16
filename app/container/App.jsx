@@ -21,7 +21,7 @@ const App = React.createClass({
 
         switch (data.type) {
           case constants.SEND_MESSAGE:
-            onNewChatMessage(data.chat_id, data.message);
+            onNewChatMessage(data.chat_id, data.sender_id, data.message);
             break;
           case constants.READ_MESSAGE:
             onMessageRead(data.chat_id);
@@ -62,8 +62,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onNewChatMessage(chatId, message) {
-    dispatch(addNewChatMessage(chatId, message));
+  onNewChatMessage(chatId, senderId, message) {
+    dispatch(addNewChatMessage(chatId, senderId, message));
   },
 
   onMessageRead(chatId) {

@@ -82,7 +82,6 @@ export default React.createClass({
     const {chat} = this.props;
 
     clearTimeout(this.state.timeout);
-    const value = this.refs.message.value;
     if(!this.state.isTyping) {
       this.setState({ isTyping: true });
       this.state.ws.send(JSON.stringify({type: constants.IS_USER_TYPING,

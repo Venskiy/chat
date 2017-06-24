@@ -146,7 +146,6 @@ class TornadoChatHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, msg):
         msg = json.loads(msg)
         http_client = tornado.httpclient.AsyncHTTPClient()
-
         if msg['type'] == constants.SEND_MESSAGE:
             message = {
                 'type': msg['type'],

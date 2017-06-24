@@ -56,12 +56,7 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, { messages }, { chats });
     case actionTypes.CHANGE_IS_TYPING_STATE:
       chats = Object.assign({}, state.chats);
-      if(chats[action.chatId].is_interlocutor_typing) {
-        chats[action.chatId].is_interlocutor_typing = false;
-      }
-      else {
-        chats[action.chatId].is_interlocutor_typing = true;
-      }
+      chats[action.chatId].is_interlocutor_typing = !chats[action.chatId].is_interlocutor_typing;
       return Object.assign({}, state, { chats });
     case actionTypes.ADD_NEW_CHAT:
       chats = Object.assign({}, state.chats);
